@@ -22,6 +22,7 @@
       --ejercicio: #22c55e;
       --lectura:   #f97316;
       --finanzas:  #eab308;
+      --personal:  #ec4899;
 
       --red:   #ef4444;
       --amber: #f97316;
@@ -375,6 +376,7 @@
     <option value="Ejercicio">💪 Ejercicio</option>
     <option value="Lectura">📚 Lectura</option>
     <option value="Finanzas">💰 Finanzas</option>
+    <option value="Personal">🏠 Personal</option>
   </select>
   <select class="filter-select" id="filter-prio" onchange="applyFilters()">
     <option value="">Todas las prioridades</option>
@@ -424,10 +426,11 @@ const AREA_COLORS = {
   Ejercicio: '#22c55e',
   Lectura:   '#f97316',
   Finanzas:  '#eab308',
+  Personal:  '#ec4899',
 };
 
 const AREA_ICONS = {
-  Agencia: '🏢', Trabajo: '💼', Ejercicio: '💪', Lectura: '📚', Finanzas: '💰'
+  Agencia: '🏢', Trabajo: '💼', Ejercicio: '💪', Lectura: '📚', Finanzas: '💰', Personal: '🏠'
 };
 
 const PRIO_ORDER = { Crítica: 0, Alta: 1, Normal: 2 };
