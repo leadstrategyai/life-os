@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🧠 Life OS — Santi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ── VARIABLES ─────────────────────────────────────── */
+    :root {
+      --bg:         #080808;
+      --card:       #111111;
+      --card-alt:   #141414;
+      --border:     rgba(255,255,255,0.07);
+      --border-h:   rgba(255,255,255,0.14);
+      --text:       #e2e2e2;
+      --sub:        #555;
+      --sub-light:  #777;
+
+      --agencia:    #4f9eff;
+      --trabajo:    #a855f7;
+      --ejercicio:  #22c55e;
+      --lectura:    #f97316;
+      --finanzas:   #eab308;
+
+      --red:   #ef4444;
+      --amber: #f97316;
+      --r: 12px;
+      --rs: 8px;
+    }
+
+    /* ── RESET ─────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 24px;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* ── HEADER ────────────────────────────────────────── */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 20px 28px;
+      margin-bottom: 20px;
+    }
+    .h-brand h1 {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.4px;
+    }
+    .h-brand .date {
+      font-size: 13px;
+      color: var(--sub-light);
+      margin-top: 3px;
+    }
+    .h-stats { display: flex; gap: 28px; }
+    .stat { text-align: center; }
+    .stat .n {
+      font-size: 30px;
+      font-weight: 700;
+      line-height: 1;
+      display: block;
+    }
+    .stat .l {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--sub);
+      margin-top: 4px;
+    }
+    .stat.crit .n { color: var(--red); }
+    .stat.alta .n { color: var(--amber); }
+    .refresh-btn {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--sub-light);
+      width: 38px; height: 38px;
+      border-radius: var(--rs);
+      cursor: pointer;
+      font-size: 18px;
+      transition: all .2s;
+      flex-shrink: 0;
+    }
+    .refresh-btn:hover { border-color: var(--border-h); color: white; }
+    .refresh-btn.spinning { animation: spin .7s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── LAYOUT ────────────────────────────────────────── */
+    .dash-grid { display: grid; gap: 16px; }
+    .bottom-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1.4fr;
+      gap: 16px;
+    }
+
+    /* ── SECTION CARD ──────────────────────────────────── */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      overflow: hidden;
+    }
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 18px 24px 16px;
+      border-bottom: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+    }
+    .card-header .icon { font-size: 18px; }
+    .card-header .title {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    .card-header .count {
+      margin-left: auto;
+      font-size: 11px;
+      color: var(--sub);
+    }
+    .card-body { padding: 20px 24px; }
+
+    /* ── OBJECTIVES ────────────────────────────────────── */
+    .obj-block { margin-bottom: 18px; }
+    .obj-anual {
+      padding: 12px 14px;
+      background: rgba(255,255,255,0.03);
+      border-left: 2px solid var(--accent);
+      border-radius: 0 var(--rs) var(--rs) 0;
+      margin-bottom: 6px;
+    }
+    .obj-tag {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .8px;
+      text-transform: uppercase;
+      color: var(--accent);
+      opacity: 0.7;
+      margin-bottom: 3px;
+    }
+    .obj-text { font-size: 14px; font-weight: 500; line-height: 1.4; }
+    .obj-children { padding-left: 20px; }
+    .obj-child {
+      position: relative;
+      padding: 7px 0 7px 16px;
+      border-left: 1px solid var(--border);
+    }
+    .obj-child::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 16px;
+      width: 12px; height: 1px;
+      background: var(--border);
+    }
+    .obj-child-tag {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .6px;
+      color: var(--sub);
+      margin-bottom: 2px;
+    }
+    .obj-child-text { font-size: 13px; color: var(--sub-light); line-height: 1.4; }
+
+    /* ── DIVIDER ───────────────────────────────────────── */
+    .sep { height: 1px; background: var(--border); margin: 16px 0; }
+
+    /* ── TASKS ─────────────────────────────────────────── */
+    .tasks-label {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      color: var(--sub);
+      margin-bottom: 10px;
+    }
+    .task {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 9px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .task:last-child { border-bottom: none; }
+    .task-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      margin-top: 5px;
+      flex-shrink: 0;
+    }
+    .prio-Crítica  { background: var(--red);   box-shadow: 0 0 7px var(--red); }
+    .prio-Alta     { background: var(--amber); }
+    .prio-Normal   { background: var(--sub); }
+    .task-body { flex: 1; min-width: 0; }
+    .task-name { font-size: 14px; line-height: 1.4; }
+    .task-meta {
+      display: flex; gap: 8px; flex-wrap: wrap;
+      margin-top: 3px;
+      font-size: 11px; color: var(--sub-light);
+    }
+    .chip {
+      padding: 1px 7px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 500;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.03);
+    }
+    .chip-blue   { color: #4f9eff; border-color: rgba(79,158,255,.2); }
+    .chip-red    { color: var(--red); border-color: rgba(239,68,68,.2); }
+
+    /* ── CLIENTS ───────────────────────────────────────── */
+    .clients { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+    .client {
+      background: var(--card-alt);
+      border: 1px solid var(--border);
+      border-radius: var(--rs);
+      padding: 14px;
+      transition: border-color .2s;
+    }
+    .client:hover { border-color: var(--border-h); }
+    .client-name { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+    .client-build {
+      font-size: 12px; color: var(--sub-light);
+      line-height: 1.5; margin-bottom: 10px;
+    }
+    .status-tag {
+      display: inline-block;
+      padding: 2px 9px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .3px;
+    }
+    .s-Activo    { background: rgba(34,197,94,.12); color: #22c55e; }
+    .s-Pausado   { background: rgba(234,179,8,.12); color: #eab308; }
+    .s-Completado{ background: rgba(100,100,100,.12); color: #777; }
+    .client-foot {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .client-foot .info { font-size: 11px; color: var(--sub); line-height: 1.6; }
+    .client-foot a { font-size: 11px; color: var(--agencia); }
+    .client-foot a:hover { text-decoration: underline; }
+
+    /* ── EMPTY / LOADING ───────────────────────────────── */
+    .empty {
+      padding: 16px 0;
+      font-size: 13px;
+      color: var(--sub);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .empty a { color: var(--sub-light); border-bottom: 1px dashed var(--sub); }
+    .skeleton {
+      height: 14px;
+      border-radius: 6px;
+      background: linear-gradient(90deg, var(--card) 25%, rgba(255,255,255,0.04) 50%, var(--card) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite;
+      margin-bottom: 8px;
+    }
+    @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+    /* ── COMPACT CARD ADJUSTMENTS ──────────────────────── */
+    .compact .card-body { padding: 16px 20px; }
+    .compact .obj-text  { font-size: 13px; }
+    .compact .task-name { font-size: 13px; }
+  </style>
+</head>
+<body>
+
+<!-- ╔══════════════════════════════╗ -->
+<!-- ║           HEADER             ║ -->
+<!-- ╚══════════════════════════════╝ -->
+<header>
+  <div class="h-brand">
+    <h1>🧠 Life OS — Santi</h1>
+    <div class="date" id="current-date"></div>
+  </div>
+  <div class="h-stats" id="h-stats">
+    <div class="stat">
+      <span class="n" id="stat-total">—</span>
+      <span class="l">pendientes</span>
+    </div>
+    <div class="stat crit">
+      <span class="n" id="stat-crit">—</span>
+      <span class="l">críticas</span>
+    </div>
+    <div class="stat alta">
+      <span class="n" id="stat-alta">—</span>
+      <span class="l">altas</span>
+    </div>
+  </div>
+  <button class="refresh-btn" id="refresh-btn" onclick="loadDashboard()" title="Actualizar">↻</button>
+</header>
+
+<!-- ╔══════════════════════════════╗ -->
+<!-- ║          DASHBOARD           ║ -->
+<!-- ╚══════════════════════════════╝ -->
+<div id="dashboard" class="dash-grid">
+  <!-- skeleton on load -->
+  <div class="card">
+    <div class="card-body">
+      <div class="skeleton" style="width:40%;height:12px;margin-bottom:16px"></div>
+      <div class="skeleton" style="width:90%"></div>
+      <div class="skeleton" style="width:70%"></div>
+      <div class="skeleton" style="width:80%"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════
+//  CONFIG
+// ══════════════════════════════════════════════
+const DB = {
+  clientes:  'bbeedd0068e640518c707ef9c9721b5c',
+  objetivos: '6020a66ec0954a489031516597ac9fb1',
+  tareas:    '85993516ae2f4829ade9be901fbea137',
+};
+
+const AREAS = [
+  { id: 'Agencia',   icon: '🏢', color: '#4f9eff', showClients: true, full: true },
+  { id: 'Trabajo',   icon: '💼', color: '#a855f7', full: true },
+  { id: 'Ejercicio', icon: '💪', color: '#22c55e' },
+  { id: 'Lectura',   icon: '📚', color: '#f97316' },
+  { id: 'Finanzas',  icon: '💰', color: '#eab308' },
+];
+
+const NOTION_URL = '/.netlify/functions/notion';
+
+// ══════════════════════════════════════════════
+//  HELPERS — property extractors
+// ══════════════════════════════════════════════
+const prop = (page, key) => page.properties[key];
+
+function title(page, key = 'Nombre') {
+  return prop(page, key)?.title?.[0]?.plain_text || '';
+}
+function sel(page, key) {
+  return prop(page, key)?.select?.name || '';
+}
+function txt(page, key) {
+  return prop(page, key)?.rich_text?.[0]?.plain_text || '';
+}
+function url(page, key) {
+  return prop(page, key)?.url || '';
+}
+function dt(page, key) {
+  return prop(page, key)?.date?.start || '';
+}
+function num(page, key) {
+  return prop(page, key)?.number ?? null;
+}
+function rel(page, key) {
+  return prop(page, key)?.relation?.map(r => r.id) || [];
+}
+
+// ══════════════════════════════════════════════
+//  HELPERS — display
+// ══════════════════════════════════════════════
+const DAYS  = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+const MONTHS= ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+
+function todayLabel() {
+  const d = new Date();
+  return `${DAYS[d.getDay()]}, ${d.getDate()} de ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
+}
+
+function fmtDate(s) {
+  if (!s) return '';
+  const d = new Date(s + 'T12:00:00');
+  return d.toLocaleDateString('es-CO', { day: 'numeric', month: 'short' });
+}
+
+function fmtMoney(n) {
+  if (n === null) return '';
+  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(n);
+}
+
+const PRIO_ORDER = { 'Crítica': 0, 'Alta': 1, 'Normal': 2 };
+function sortByPrio(list) {
+  return [...list].sort((a, b) =>
+    (PRIO_ORDER[sel(a, 'Prioridad')] ?? 2) - (PRIO_ORDER[sel(b, 'Prioridad')] ?? 2)
+  );
+}
+
+function h(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+// ══════════════════════════════════════════════
+//  API
+// ══════════════════════════════════════════════
+async function notionQuery(dbId, body = {}) {
+  const res = await fetch(NOTION_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      endpoint: `databases/${dbId}/query`,
+      method: 'POST',
+      body,
+    }),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error || `HTTP ${res.status}`);
+  }
+  return res.json();
+}
+
+// ══════════════════════════════════════════════
+//  RENDERERS
+// ══════════════════════════════════════════════
+
+/* — Objectives for one area — */
+function renderObjectives(objetivos, areaId, color) {
+  const items = objetivos.filter(o => sel(o, 'Área') === areaId && sel(o, 'Estado') !== 'Completado');
+
+  const anuales  = items.filter(o => sel(o, 'Timeframe') === 'Anual');
+  const mensuales= items.filter(o => sel(o, 'Timeframe') === 'Mensual');
+  const semanales= items.filter(o => sel(o, 'Timeframe') === 'Semanal');
+
+  if (items.length === 0) {
+    return `<div class="empty">📌 Sin objetivos —
+      <a href="https://app.notion.com/p/6020a66ec0954a489031516597ac9fb1" target="_blank">
+        agregar en Notion →
+      </a>
+    </div>`;
+  }
+
+  let out = '<div class="obj-block">';
+
+  anuales.forEach(o => {
+    out += `<div class="obj-anual" style="border-left-color:${color}">
+      <div class="obj-tag">🎯 Objetivo 2026</div>
+      <div class="obj-text">${h(title(o, 'Objetivo'))}</div>
+    </div>`;
+  });
+
+  if (mensuales.length || semanales.length) {
+    out += '<div class="obj-children">';
+
+    mensuales.forEach(o => {
+      out += `<div class="obj-child">
+        <div class="obj-child-tag">📅 Este mes</div>
+        <div class="obj-child-text">${h(title(o, 'Objetivo'))}</div>
+      </div>`;
+    });
+
+    semanales.forEach(o => {
+      const estado = sel(o, 'Estado');
+      out += `<div class="obj-child">
+        <div class="obj-child-tag">📋 Esta semana</div>
+        <div class="obj-child-text">${h(title(o, 'Objetivo'))}
+          ${estado === 'En progreso' ? `<span class="chip chip-blue" style="margin-left:6px">En progreso</span>` : ''}
+        </div>
+      </div>`;
+    });
+
+    out += '</div>';
+  }
+
+  out += '</div>';
+  return out;
+}
+
+/* — Task list for one area — */
+function renderTasks(tareas, areaId, clienteMap) {
+  const items = sortByPrio(
+    tareas.filter(t => sel(t, 'Área') === areaId && sel(t, 'Estado') !== 'Hecho')
+  );
+
+  if (items.length === 0) {
+    return `<div class="empty">✓ Sin tareas pendientes</div>`;
+  }
+
+  let out = `<div class="tasks-label">Tareas pendientes (${items.length})</div>`;
+
+  items.forEach(t => {
+    const prio    = sel(t, 'Prioridad') || 'Normal';
+    const estado  = sel(t, 'Estado');
+    const fecha   = dt(t, 'Fecha');
+    const cIds    = rel(t, 'Cliente');
+    const cliente = cIds.length ? clienteMap[cIds[0]] : '';
+
+    out += `<div class="task">
+      <div class="task-dot prio-${h(prio)}"></div>
+      <div class="task-body">
+        <div class="task-name">${h(title(t, 'Tarea'))}</div>
+        <div class="task-meta">
+          ${fecha   ? `<span>${fmtDate(fecha)}</span>` : ''}
+          ${cliente ? `<span>· ${h(cliente)}</span>` : ''}
+          <span class="chip ${prio === 'Crítica' ? 'chip-red' : ''}">${h(prio)}</span>
+          <span class="chip">${h(estado)}</span>
+        </div>
+      </div>
+    </div>`;
+  });
+
+  return out;
+}
+
+/* — Client cards — */
+function renderClients(clientes) {
+  if (clientes.length === 0) {
+    return `<div class="empty">Sin clientes —
+      <a href="https://app.notion.com/p/bbeedd0068e640518c707ef9c9721b5c" target="_blank">
+        agregar en Notion →
+      </a>
+    </div>`;
+  }
+
+  let out = '<div class="clients">';
+
+  clientes.forEach(c => {
+    const nombre   = title(c, 'Nombre');
+    const estado   = sel(c,  'Estado');
+    const build    = txt(c,  'Qué se construye');
+    const link     = url(c,  'Link dashboard');
+    const delivery = dt(c,   'Próxima entrega');
+    const monto    = num(c,  'Monto');
+
+    out += `<div class="client">
+      <div class="client-name">${h(nombre)}</div>
+      ${build  ? `<div class="client-build">${h(build)}</div>` : '<div style="height:8px"></div>'}
+      <span class="status-tag s-${h(estado)}">${h(estado)}</span>
+      <div class="client-foot">
+        <div class="info">
+          ${delivery ? `📅 ${fmtDate(delivery)}<br>` : ''}
+          ${monto    ? fmtMoney(monto) : ''}
+        </div>
+        ${link ? `<a href="${h(link)}" target="_blank">Ver dashboard →</a>` : ''}
+      </div>
+    </div>`;
+  });
+
+  out += '</div>';
+  return out;
+}
+
+/* — Full area section — */
+function renderAreaFull(area, objetivos, tareas, clientes, clienteMap) {
+  const taskCount = tareas.filter(
+    t => sel(t, 'Área') === area.id && sel(t, 'Estado') !== 'Hecho'
+  ).length;
+
+  let body = renderObjectives(objetivos, area.id, area.color);
+  body += '<div class="sep"></div>';
+
+  if (area.showClients) {
+    body += `<div class="tasks-label" style="margin-bottom:12px">Clientes activos</div>`;
+    body += renderClients(clientes);
+    body += '<div class="sep"></div>';
+  }
+
+  body += renderTasks(tareas, area.id, clienteMap);
+
+  return `<div class="card" style="--accent:${area.color}">
+    <div class="card-header">
+      <span class="icon">${area.icon}</span>
+      <span class="title">${area.id}</span>
+      ${taskCount ? `<span class="count">${taskCount} tarea${taskCount > 1 ? 's' : ''}</span>` : ''}
+    </div>
+    <div class="card-body">${body}</div>
+  </div>`;
+}
+
+/* — Compact area section (Ejercicio, Lectura, Finanzas) — */
+function renderAreaCompact(area, objetivos, tareas, clienteMap) {
+  const taskCount = tareas.filter(
+    t => sel(t, 'Área') === area.id && sel(t, 'Estado') !== 'Hecho'
+  ).length;
+
+  let body = renderObjectives(objetivos, area.id, area.color);
+  body += '<div class="sep"></div>';
+  body += renderTasks(tareas, area.id, clienteMap);
+
+  return `<div class="card compact" style="--accent:${area.color}">
+    <div class="card-header">
+      <span class="icon">${area.icon}</span>
+      <span class="title">${area.id}</span>
+      ${taskCount ? `<span class="count">${taskCount}</span>` : ''}
+    </div>
+    <div class="card-body">${body}</div>
+  </div>`;
+}
+
+// ══════════════════════════════════════════════
+//  MAIN RENDER
+// ══════════════════════════════════════════════
+function renderDashboard(objetivos, tareas, clientes) {
+  const clienteMap = {};
+  clientes.forEach(c => { clienteMap[c.id] = title(c, 'Nombre'); });
+
+  // Header stats
+  const active = tareas.filter(t => sel(t, 'Estado') !== 'Hecho').length;
+  const crit   = tareas.filter(t => sel(t, 'Estado') !== 'Hecho' && sel(t, 'Prioridad') === 'Crítica').length;
+  const alta   = tareas.filter(t => sel(t, 'Estado') !== 'Hecho' && sel(t, 'Prioridad') === 'Alta').length;
+  document.getElementById('stat-total').textContent = active;
+  document.getElementById('stat-crit').textContent  = crit;
+  document.getElementById('stat-alta').textContent  = alta;
+
+  let html = '';
+
+  // Full sections (Agencia, Trabajo)
+  AREAS.filter(a => a.full).forEach(area => {
+    html += renderAreaFull(area, objetivos, tareas, clientes, clienteMap);
+  });
+
+  // Compact row (Ejercicio, Lectura, Finanzas)
+  const compactAreas = AREAS.filter(a => !a.full);
+  if (compactAreas.length) {
+    html += '<div class="bottom-row">';
+    compactAreas.forEach(area => {
+      html += renderAreaCompact(area, objetivos, tareas, clienteMap);
+    });
+    html += '</div>';
+  }
+
+  document.getElementById('dashboard').innerHTML = html;
+}
+
+// ══════════════════════════════════════════════
+//  LOAD
+// ══════════════════════════════════════════════
+async function loadDashboard() {
+  const btn = document.getElementById('refresh-btn');
+  btn.classList.add('spinning');
+
+  try {
+    const [obj, tar, cli] = await Promise.all([
+      notionQuery(DB.objetivos, {
+        sorts: [{ property: 'Timeframe', direction: 'ascending' }],
+      }),
+      notionQuery(DB.tareas, {
+        sorts: [{ property: 'Prioridad', direction: 'ascending' }],
+      }),
+      notionQuery(DB.clientes),
+    ]);
+
+    renderDashboard(
+      obj.results || [],
+      tar.results || [],
+      cli.results || [],
+    );
+  } catch (err) {
+    document.getElementById('dashboard').innerHTML = `
+      <div class="card" style="--accent:#ef4444">
+        <div class="card-header">
+          <span class="icon">⚠️</span>
+          <span class="title" style="color:#ef4444">Error de conexión</span>
+        </div>
+        <div class="card-body">
+          <p style="color:#777;font-size:14px;margin-bottom:8px">${h(err.message)}</p>
+          <p style="color:#555;font-size:13px">
+            Asegúrate de que <code>NOTION_TOKEN</code> esté configurado en Netlify
+            y que la integración tenga acceso a la página <strong>Life OS</strong>.
+          </p>
+        </div>
+      </div>`;
+  } finally {
+    btn.classList.remove('spinning');
+  }
+}
+
+// ══════════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════════
+document.getElementById('current-date').textContent = todayLabel();
+loadDashboard();
+</script>
+</body>
+</html>
