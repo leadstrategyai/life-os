@@ -7,22 +7,21 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <style>
-    /* ── VARIABLES ─────────────────────────────────────── */
     :root {
-      --bg:         #080808;
-      --card:       #111111;
-      --card-alt:   #141414;
-      --border:     rgba(255,255,255,0.07);
-      --border-h:   rgba(255,255,255,0.14);
-      --text:       #e2e2e2;
-      --sub:        #555;
-      --sub-light:  #777;
+      --bg:       #080808;
+      --card:     #111111;
+      --row-h:    #161616;
+      --border:   rgba(255,255,255,0.07);
+      --border-h: rgba(255,255,255,0.14);
+      --text:     #e2e2e2;
+      --sub:      #555;
+      --sub-l:    #777;
 
-      --agencia:    #4f9eff;
-      --trabajo:    #a855f7;
-      --ejercicio:  #22c55e;
-      --lectura:    #f97316;
-      --finanzas:   #eab308;
+      --agencia:   #4f9eff;
+      --trabajo:   #a855f7;
+      --ejercicio: #22c55e;
+      --lectura:   #f97316;
+      --finanzas:  #eab308;
 
       --red:   #ef4444;
       --amber: #f97316;
@@ -30,270 +29,313 @@
       --rs: 8px;
     }
 
-    /* ── RESET ─────────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
       font-family: 'Inter', -apple-system, sans-serif;
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
       padding: 24px;
+      max-width: 1300px;
+      margin: 0 auto;
     }
-    a { color: inherit; text-decoration: none; }
 
-    /* ── HEADER ────────────────────────────────────────── */
+    /* ── HEADER ─────────────────────────────── */
     header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 24px;
+      gap: 20px;
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: var(--r);
-      padding: 20px 28px;
-      margin-bottom: 20px;
+      padding: 18px 24px;
+      margin-bottom: 16px;
     }
-    .h-brand h1 {
-      font-size: 20px;
-      font-weight: 700;
-      letter-spacing: -0.4px;
-    }
-    .h-brand .date {
-      font-size: 13px;
-      color: var(--sub-light);
-      margin-top: 3px;
-    }
-    .h-stats { display: flex; gap: 28px; }
+    .h-brand h1 { font-size: 19px; font-weight: 700; letter-spacing: -0.3px; }
+    .h-brand .date { font-size: 12px; color: var(--sub-l); margin-top: 2px; }
+    .h-stats { display: flex; gap: 24px; }
     .stat { text-align: center; }
-    .stat .n {
-      font-size: 30px;
-      font-weight: 700;
-      line-height: 1;
-      display: block;
-    }
-    .stat .l {
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.6px;
-      color: var(--sub);
-      margin-top: 4px;
-    }
+    .stat .n { font-size: 26px; font-weight: 700; line-height: 1; display: block; }
+    .stat .l { font-size: 10px; text-transform: uppercase; letter-spacing: 0.6px; color: var(--sub); margin-top: 3px; }
     .stat.crit .n { color: var(--red); }
     .stat.alta .n { color: var(--amber); }
-    .refresh-btn {
+    .h-actions { display: flex; gap: 8px; }
+    .icon-btn {
       background: none;
       border: 1px solid var(--border);
-      color: var(--sub-light);
-      width: 38px; height: 38px;
+      color: var(--sub-l);
+      width: 36px; height: 36px;
       border-radius: var(--rs);
       cursor: pointer;
-      font-size: 18px;
+      font-size: 16px;
       transition: all .2s;
-      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      text-decoration: none;
     }
-    .refresh-btn:hover { border-color: var(--border-h); color: white; }
-    .refresh-btn.spinning { animation: spin .7s linear infinite; }
+    .icon-btn:hover { border-color: var(--border-h); color: white; }
+    .spinning { animation: spin .7s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ── LAYOUT ────────────────────────────────────────── */
-    .dash-grid { display: grid; gap: 16px; }
-    .bottom-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1.4fr;
-      gap: 16px;
+    /* ── FILTERS ────────────────────────────── */
+    .filters {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .filter-select, .filter-input {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: var(--rs);
+      padding: 8px 12px;
+      font-size: 13px;
+      font-family: inherit;
+      cursor: pointer;
+      outline: none;
+      transition: border-color .2s;
+    }
+    .filter-select:hover, .filter-input:hover,
+    .filter-select:focus, .filter-input:focus {
+      border-color: var(--border-h);
+    }
+    .filter-input { flex: 1; min-width: 180px; }
+    .filter-input::placeholder { color: var(--sub); }
+    .filter-count {
+      margin-left: auto;
+      font-size: 12px;
+      color: var(--sub);
+      display: flex;
+      align-items: center;
     }
 
-    /* ── SECTION CARD ──────────────────────────────────── */
-    .card {
+    /* ── OBJECTIVES ACCORDION ───────────────── */
+    .objectives-section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      margin-bottom: 12px;
+      overflow: hidden;
+    }
+    .objectives-toggle {
+      width: 100%;
+      background: none;
+      border: none;
+      color: var(--sub-l);
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .8px;
+      text-transform: uppercase;
+      padding: 14px 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-align: left;
+      transition: color .2s;
+    }
+    .objectives-toggle:hover { color: var(--text); }
+    .objectives-toggle .arrow { margin-left: auto; transition: transform .2s; }
+    .objectives-toggle.open .arrow { transform: rotate(180deg); }
+    .objectives-body {
+      display: none;
+      padding: 0 20px 16px;
+    }
+    .objectives-body.open { display: block; }
+    .obj-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 10px;
+    }
+    .obj-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-left: 2px solid var(--accent);
+      border-radius: var(--rs);
+      padding: 10px 12px;
+    }
+    .obj-area-label {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .6px;
+      color: var(--accent);
+      margin-bottom: 2px;
+    }
+    .obj-timeframe {
+      font-size: 10px;
+      color: var(--sub);
+      margin-bottom: 4px;
+    }
+    .obj-text { font-size: 13px; line-height: 1.4; }
+
+    /* ── TASK TABLE ─────────────────────────── */
+    .table-card {
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: var(--r);
       overflow: hidden;
     }
-    .card-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 18px 24px 16px;
+    .table-header {
+      display: grid;
+      grid-template-columns: 44px 1fr 130px 150px 100px 80px;
+      padding: 10px 16px;
       border-bottom: 1px solid var(--border);
-      border-left: 3px solid var(--accent);
-    }
-    .card-header .icon { font-size: 18px; }
-    .card-header .title {
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 1.2px;
-      text-transform: uppercase;
-      color: var(--accent);
-    }
-    .card-header .count {
-      margin-left: auto;
       font-size: 11px;
-      color: var(--sub);
-    }
-    .card-body { padding: 20px 24px; }
-
-    /* ── OBJECTIVES ────────────────────────────────────── */
-    .obj-block { margin-bottom: 18px; }
-    .obj-anual {
-      padding: 12px 14px;
-      background: rgba(255,255,255,0.03);
-      border-left: 2px solid var(--accent);
-      border-radius: 0 var(--rs) var(--rs) 0;
-      margin-bottom: 6px;
-    }
-    .obj-tag {
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: .8px;
-      text-transform: uppercase;
-      color: var(--accent);
-      opacity: 0.7;
-      margin-bottom: 3px;
-    }
-    .obj-text { font-size: 14px; font-weight: 500; line-height: 1.4; }
-    .obj-children { padding-left: 20px; }
-    .obj-child {
-      position: relative;
-      padding: 7px 0 7px 16px;
-      border-left: 1px solid var(--border);
-    }
-    .obj-child::before {
-      content: '';
-      position: absolute;
-      left: 0; top: 16px;
-      width: 12px; height: 1px;
-      background: var(--border);
-    }
-    .obj-child-tag {
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: .6px;
-      color: var(--sub);
-      margin-bottom: 2px;
-    }
-    .obj-child-text { font-size: 13px; color: var(--sub-light); line-height: 1.4; }
-
-    /* ── DIVIDER ───────────────────────────────────────── */
-    .sep { height: 1px; background: var(--border); margin: 16px 0; }
-
-    /* ── TASKS ─────────────────────────────────────────── */
-    .tasks-label {
-      font-size: 10px;
       font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: .8px;
+      letter-spacing: .7px;
       color: var(--sub);
-      margin-bottom: 10px;
     }
-    .task {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      padding: 9px 0;
+    .task-row {
+      display: grid;
+      grid-template-columns: 44px 1fr 130px 150px 100px 80px;
+      padding: 0 16px;
       border-bottom: 1px solid var(--border);
+      align-items: center;
+      min-height: 52px;
+      transition: background .15s, opacity .3s;
     }
-    .task:last-child { border-bottom: none; }
-    .task-dot {
-      width: 7px; height: 7px;
-      border-radius: 50%;
-      margin-top: 5px;
-      flex-shrink: 0;
+    .task-row:last-child { border-bottom: none; }
+    .task-row:hover { background: var(--row-h); }
+    .task-row.done {
+      opacity: 0.35;
+      pointer-events: none;
     }
-    .prio-Crítica  { background: var(--red);   box-shadow: 0 0 7px var(--red); }
-    .prio-Alta     { background: var(--amber); }
-    .prio-Normal   { background: var(--sub); }
-    .task-body { flex: 1; min-width: 0; }
-    .task-name { font-size: 14px; line-height: 1.4; }
-    .task-meta {
-      display: flex; gap: 8px; flex-wrap: wrap;
-      margin-top: 3px;
-      font-size: 11px; color: var(--sub-light);
-    }
-    .chip {
-      padding: 1px 7px;
-      border-radius: 4px;
-      font-size: 10px;
-      font-weight: 500;
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,0.03);
-    }
-    .chip-blue   { color: #4f9eff; border-color: rgba(79,158,255,.2); }
-    .chip-red    { color: var(--red); border-color: rgba(239,68,68,.2); }
+    .task-row.done .task-name { text-decoration: line-through; }
 
-    /* ── CLIENTS ───────────────────────────────────────── */
-    .clients { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
-    .client {
-      background: var(--card-alt);
-      border: 1px solid var(--border);
-      border-radius: var(--rs);
-      padding: 14px;
-      transition: border-color .2s;
+    /* check button */
+    .check-btn {
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      border: 2px solid var(--sub);
+      background: none;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all .15s;
+      flex-shrink: 0;
+      color: transparent;
+      font-size: 13px;
     }
-    .client:hover { border-color: var(--border-h); }
-    .client-name { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
-    .client-build {
-      font-size: 12px; color: var(--sub-light);
-      line-height: 1.5; margin-bottom: 10px;
+    .check-btn:hover {
+      border-color: #22c55e;
+      background: rgba(34,197,94,.1);
+      color: #22c55e;
     }
-    .status-tag {
-      display: inline-block;
-      padding: 2px 9px;
+    .check-btn.checking {
+      border-color: #22c55e;
+      background: rgba(34,197,94,.2);
+      color: #22c55e;
+      animation: pulse .4s ease;
+    }
+    @keyframes pulse {
+      0%   { transform: scale(1); }
+      50%  { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+
+    /* task name cell */
+    .task-name-cell {}
+    .task-name { font-size: 14px; line-height: 1.4; padding: 14px 0; }
+    .task-notes { font-size: 11px; color: var(--sub); margin-top: 1px; }
+
+    /* area badge */
+    .area-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 9px;
       border-radius: 20px;
-      font-size: 10px;
+      font-size: 11px;
       font-weight: 600;
-      letter-spacing: .3px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      width: fit-content;
     }
-    .s-Activo    { background: rgba(34,197,94,.12); color: #22c55e; }
-    .s-Pausado   { background: rgba(234,179,8,.12); color: #eab308; }
-    .s-Completado{ background: rgba(100,100,100,.12); color: #777; }
-    .client-foot {
-      margin-top: 10px;
-      padding-top: 10px;
+    .area-dot { width: 6px; height: 6px; border-radius: 50%; }
+
+    /* client cell */
+    .client-cell { font-size: 13px; color: var(--sub-l); }
+
+    /* priority badge */
+    .prio-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .prio-dot { width: 7px; height: 7px; border-radius: 50%; }
+    .prio-Crítica .prio-dot { background: var(--red); box-shadow: 0 0 6px var(--red); }
+    .prio-Alta    .prio-dot { background: var(--amber); }
+    .prio-Normal  .prio-dot { background: var(--sub); }
+    .prio-Crítica { color: var(--red); }
+    .prio-Alta    { color: var(--amber); }
+    .prio-Normal  { color: var(--sub-l); }
+
+    /* date cell */
+    .date-cell { font-size: 12px; color: var(--sub-l); }
+    .date-past { color: var(--red); }
+
+    /* empty / loading */
+    .empty-row {
+      padding: 40px 20px;
+      text-align: center;
+      color: var(--sub);
+      font-size: 14px;
+    }
+    .empty-row a { color: var(--sub-l); border-bottom: 1px dashed; }
+
+    /* table footer */
+    .table-footer {
+      padding: 12px 16px;
       border-top: 1px solid var(--border);
       display: flex;
-      justify-content: space-between;
       align-items: center;
-    }
-    .client-foot .info { font-size: 11px; color: var(--sub); line-height: 1.6; }
-    .client-foot a { font-size: 11px; color: var(--agencia); }
-    .client-foot a:hover { text-decoration: underline; }
-
-    /* ── EMPTY / LOADING ───────────────────────────────── */
-    .empty {
-      padding: 16px 0;
-      font-size: 13px;
+      justify-content: space-between;
+      font-size: 12px;
       color: var(--sub);
-      display: flex; align-items: center; gap: 8px;
     }
-    .empty a { color: var(--sub-light); border-bottom: 1px dashed var(--sub); }
-    .skeleton {
-      height: 14px;
-      border-radius: 6px;
-      background: linear-gradient(90deg, var(--card) 25%, rgba(255,255,255,0.04) 50%, var(--card) 75%);
-      background-size: 200% 100%;
-      animation: shimmer 1.4s infinite;
-      margin-bottom: 8px;
+    .table-footer a {
+      color: var(--agencia);
+      text-decoration: none;
+      font-size: 12px;
     }
-    @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+    .table-footer a:hover { text-decoration: underline; }
 
-    /* ── COMPACT CARD ADJUSTMENTS ──────────────────────── */
-    .compact .card-body { padding: 16px 20px; }
-    .compact .obj-text  { font-size: 13px; }
-    .compact .task-name { font-size: 13px; }
+    /* toast */
+    .toast {
+      position: fixed;
+      bottom: 24px; right: 24px;
+      background: #1a1a1a;
+      border: 1px solid var(--border);
+      border-radius: var(--rs);
+      padding: 10px 16px;
+      font-size: 13px;
+      color: var(--text);
+      opacity: 0;
+      transform: translateY(8px);
+      transition: all .25s;
+      pointer-events: none;
+      z-index: 100;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .toast.success { border-color: rgba(34,197,94,.3); }
+    .toast.error   { border-color: rgba(239,68,68,.3); }
   </style>
 </head>
 <body>
 
-<!-- ╔══════════════════════════════╗ -->
-<!-- ║           HEADER             ║ -->
-<!-- ╚══════════════════════════════╝ -->
+<!-- ── HEADER ──────────────────────────────────── -->
 <header>
   <div class="h-brand">
     <h1>🧠 Life OS — Santi</h1>
     <div class="date" id="current-date"></div>
   </div>
-  <div class="h-stats" id="h-stats">
+  <div class="h-stats">
     <div class="stat">
       <span class="n" id="stat-total">—</span>
       <span class="l">pendientes</span>
@@ -307,23 +349,64 @@
       <span class="l">altas</span>
     </div>
   </div>
-  <button class="refresh-btn" id="refresh-btn" onclick="loadDashboard()" title="Actualizar">↻</button>
+  <div class="h-actions">
+    <button class="icon-btn" id="refresh-btn" onclick="loadDashboard()" title="Actualizar">↻</button>
+    <a class="icon-btn" href="https://app.notion.com/p/38f722e4afcf81d5b83ec99ee67b5fd2" target="_blank" title="Abrir Notion">N</a>
+  </div>
 </header>
 
-<!-- ╔══════════════════════════════╗ -->
-<!-- ║          DASHBOARD           ║ -->
-<!-- ╚══════════════════════════════╝ -->
-<div id="dashboard" class="dash-grid">
-  <!-- skeleton on load -->
-  <div class="card">
-    <div class="card-body">
-      <div class="skeleton" style="width:40%;height:12px;margin-bottom:16px"></div>
-      <div class="skeleton" style="width:90%"></div>
-      <div class="skeleton" style="width:70%"></div>
-      <div class="skeleton" style="width:80%"></div>
-    </div>
+<!-- ── OBJECTIVES ACCORDION ────────────────────── -->
+<div class="objectives-section" id="obj-section" style="display:none">
+  <button class="objectives-toggle" id="obj-toggle" onclick="toggleObjectives()">
+    🎯 Objetivos
+    <span class="arrow">▾</span>
+  </button>
+  <div class="objectives-body" id="obj-body">
+    <div class="obj-grid" id="obj-grid"></div>
   </div>
 </div>
+
+<!-- ── FILTERS ──────────────────────────────────── -->
+<div class="filters">
+  <select class="filter-select" id="filter-area" onchange="applyFilters()">
+    <option value="">Todas las áreas</option>
+    <option value="Agencia">🏢 Agencia</option>
+    <option value="Trabajo">💼 Trabajo</option>
+    <option value="Ejercicio">💪 Ejercicio</option>
+    <option value="Lectura">📚 Lectura</option>
+    <option value="Finanzas">💰 Finanzas</option>
+  </select>
+  <select class="filter-select" id="filter-prio" onchange="applyFilters()">
+    <option value="">Todas las prioridades</option>
+    <option value="Crítica">🔴 Crítica</option>
+    <option value="Alta">🟠 Alta</option>
+    <option value="Normal">⚪ Normal</option>
+  </select>
+  <input class="filter-input" id="filter-search" placeholder="🔍 Buscar tarea..." oninput="applyFilters()" />
+  <span class="filter-count" id="filter-count"></span>
+</div>
+
+<!-- ── TASK TABLE ────────────────────────────────── -->
+<div class="table-card">
+  <div class="table-header">
+    <div></div>
+    <div>Tarea</div>
+    <div>Área</div>
+    <div>Cliente</div>
+    <div>Prioridad</div>
+    <div>Fecha</div>
+  </div>
+  <div id="task-list">
+    <div class="empty-row">Cargando tareas...</div>
+  </div>
+  <div class="table-footer">
+    <span id="footer-count"></span>
+    <a href="https://app.notion.com/p/85993516ae2f4829ade9be901fbea137" target="_blank">+ Agregar tarea en Notion →</a>
+  </div>
+</div>
+
+<!-- ── TOAST ─────────────────────────────────────── -->
+<div class="toast" id="toast"></div>
 
 <script>
 // ══════════════════════════════════════════════
@@ -335,48 +418,41 @@ const DB = {
   tareas:    '85993516ae2f4829ade9be901fbea137',
 };
 
-const AREAS = [
-  { id: 'Agencia',   icon: '🏢', color: '#4f9eff', showClients: true, full: true },
-  { id: 'Trabajo',   icon: '💼', color: '#a855f7', full: true },
-  { id: 'Ejercicio', icon: '💪', color: '#22c55e' },
-  { id: 'Lectura',   icon: '📚', color: '#f97316' },
-  { id: 'Finanzas',  icon: '💰', color: '#eab308' },
-];
+const AREA_COLORS = {
+  Agencia:   '#4f9eff',
+  Trabajo:   '#a855f7',
+  Ejercicio: '#22c55e',
+  Lectura:   '#f97316',
+  Finanzas:  '#eab308',
+};
 
+const AREA_ICONS = {
+  Agencia: '🏢', Trabajo: '💼', Ejercicio: '💪', Lectura: '📚', Finanzas: '💰'
+};
+
+const PRIO_ORDER = { Crítica: 0, Alta: 1, Normal: 2 };
 const NOTION_URL = '/.netlify/functions/notion';
 
 // ══════════════════════════════════════════════
-//  HELPERS — property extractors
+//  STATE
 // ══════════════════════════════════════════════
-const prop = (page, key) => page.properties[key];
-
-function title(page, key = 'Nombre') {
-  return prop(page, key)?.title?.[0]?.plain_text || '';
-}
-function sel(page, key) {
-  return prop(page, key)?.select?.name || '';
-}
-function txt(page, key) {
-  return prop(page, key)?.rich_text?.[0]?.plain_text || '';
-}
-function url(page, key) {
-  return prop(page, key)?.url || '';
-}
-function dt(page, key) {
-  return prop(page, key)?.date?.start || '';
-}
-function num(page, key) {
-  return prop(page, key)?.number ?? null;
-}
-function rel(page, key) {
-  return prop(page, key)?.relation?.map(r => r.id) || [];
-}
+let allTasks    = [];
+let clienteMap  = {};
+let objetivos   = [];
 
 // ══════════════════════════════════════════════
-//  HELPERS — display
+//  HELPERS
 // ══════════════════════════════════════════════
-const DAYS  = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
-const MONTHS= ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+const prop  = (p, k) => p.properties[k];
+const title = (p, k = 'Nombre') => prop(p, k)?.title?.[0]?.plain_text || '';
+const sel   = (p, k) => prop(p, k)?.select?.name || '';
+const txt   = (p, k) => prop(p, k)?.rich_text?.[0]?.plain_text || '';
+const dt    = (p, k) => prop(p, k)?.date?.start || '';
+const rel   = (p, k) => prop(p, k)?.relation?.map(r => r.id) || [];
+const h     = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+const DAYS   = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+const MONTHS = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
 
 function todayLabel() {
   const d = new Date();
@@ -385,28 +461,16 @@ function todayLabel() {
 
 function fmtDate(s) {
   if (!s) return '';
-  const d = new Date(s + 'T12:00:00');
+  const d  = new Date(s + 'T12:00:00');
+  const today = new Date(); today.setHours(0,0,0,0);
   return d.toLocaleDateString('es-CO', { day: 'numeric', month: 'short' });
 }
 
-function fmtMoney(n) {
-  if (n === null) return '';
-  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(n);
-}
-
-const PRIO_ORDER = { 'Crítica': 0, 'Alta': 1, 'Normal': 2 };
-function sortByPrio(list) {
-  return [...list].sort((a, b) =>
-    (PRIO_ORDER[sel(a, 'Prioridad')] ?? 2) - (PRIO_ORDER[sel(b, 'Prioridad')] ?? 2)
-  );
-}
-
-function h(str) {
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
+function isOverdue(s) {
+  if (!s) return false;
+  const d = new Date(s + 'T12:00:00');
+  const today = new Date(); today.setHours(0,0,0,0);
+  return d < today;
 }
 
 // ══════════════════════════════════════════════
@@ -416,229 +480,222 @@ async function notionQuery(dbId, body = {}) {
   const res = await fetch(NOTION_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ endpoint: `databases/${dbId}/query`, method: 'POST', body }),
+  });
+  if (!res.ok) { const e = await res.json().catch(()=>({})); throw new Error(e.error || `HTTP ${res.status}`); }
+  return res.json();
+}
+
+async function notionPatch(pageId, properties) {
+  const res = await fetch(NOTION_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      endpoint: `databases/${dbId}/query`,
-      method: 'POST',
-      body,
+      endpoint: `pages/${pageId}`,
+      method: 'PATCH',
+      body: { properties },
     }),
   });
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    throw new Error(err.error || `HTTP ${res.status}`);
-  }
+  if (!res.ok) { const e = await res.json().catch(()=>({})); throw new Error(e.error || `HTTP ${res.status}`); }
   return res.json();
 }
 
 // ══════════════════════════════════════════════
-//  RENDERERS
+//  TOAST
 // ══════════════════════════════════════════════
+let toastTimer;
+function showToast(msg, type = 'success') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = `toast ${type} show`;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { t.className = 'toast'; }, 2500);
+}
 
-/* — Objectives for one area — */
-function renderObjectives(objetivos, areaId, color) {
-  const items = objetivos.filter(o => sel(o, 'Área') === areaId && sel(o, 'Estado') !== 'Completado');
+// ══════════════════════════════════════════════
+//  CHECK OFF TASK
+// ══════════════════════════════════════════════
+async function checkTask(pageId, btn) {
+  btn.classList.add('checking');
+  btn.textContent = '✓';
 
-  const anuales  = items.filter(o => sel(o, 'Timeframe') === 'Anual');
-  const mensuales= items.filter(o => sel(o, 'Timeframe') === 'Mensual');
-  const semanales= items.filter(o => sel(o, 'Timeframe') === 'Semanal');
+  const row = btn.closest('.task-row');
+  row.classList.add('done');
 
-  if (items.length === 0) {
-    return `<div class="empty">📌 Sin objetivos —
-      <a href="https://app.notion.com/p/6020a66ec0954a489031516597ac9fb1" target="_blank">
-        agregar en Notion →
-      </a>
-    </div>`;
+  try {
+    await notionPatch(pageId, { Estado: { select: { name: 'Hecho' } } });
+    showToast('✅ Tarea marcada como hecha en Notion');
+
+    // remove row after animation
+    setTimeout(() => {
+      row.style.maxHeight = row.offsetHeight + 'px';
+      row.style.overflow = 'hidden';
+      row.style.transition = 'max-height .3s, padding .3s, opacity .3s';
+      requestAnimationFrame(() => {
+        row.style.maxHeight = '0';
+        row.style.paddingTop = '0';
+        row.style.paddingBottom = '0';
+        row.style.opacity = '0';
+      });
+      setTimeout(() => {
+        row.remove();
+        // update allTasks
+        allTasks = allTasks.filter(t => t.id !== pageId);
+        updateStats();
+        updateFooter();
+      }, 320);
+    }, 500);
+
+  } catch (err) {
+    row.classList.remove('done');
+    btn.classList.remove('checking');
+    btn.textContent = '';
+    showToast('⚠️ No se pudo actualizar en Notion', 'error');
   }
+}
 
-  let out = '<div class="obj-block">';
+// ══════════════════════════════════════════════
+//  RENDER TASKS
+// ══════════════════════════════════════════════
+function renderTaskRow(task) {
+  const pageId  = task.id;
+  const name    = title(task, 'Tarea');
+  const area    = sel(task, 'Área');
+  const prio    = sel(task, 'Prioridad') || 'Normal';
+  const estado  = sel(task, 'Estado');
+  const fecha   = dt(task, 'Fecha');
+  const cIds    = rel(task, 'Cliente');
+  const cliente = cIds.length ? (clienteMap[cIds[0]] || '') : '';
+  const color   = AREA_COLORS[area] || '#888';
+  const icon    = AREA_ICONS[area] || '•';
+  const overdue = isOverdue(fecha);
 
-  anuales.forEach(o => {
-    out += `<div class="obj-anual" style="border-left-color:${color}">
-      <div class="obj-tag">🎯 Objetivo 2026</div>
+  return `<div class="task-row" data-id="${h(pageId)}" data-area="${h(area)}" data-prio="${h(prio)}" data-name="${h(name.toLowerCase())}">
+    <div>
+      <button class="check-btn" onclick="checkTask('${h(pageId)}', this)" title="Marcar como hecha"></button>
+    </div>
+    <div class="task-name-cell">
+      <div class="task-name">${h(name)}</div>
+    </div>
+    <div>
+      <span class="area-badge" style="color:${color};border-color:${color}33">
+        <span class="area-dot" style="background:${color}"></span>
+        ${h(area)}
+      </span>
+    </div>
+    <div class="client-cell">${h(cliente) || '—'}</div>
+    <div>
+      <span class="prio-badge prio-${h(prio)}">
+        <span class="prio-dot"></span>
+        ${h(prio)}
+      </span>
+    </div>
+    <div class="date-cell ${overdue ? 'date-past' : ''}">${fmtDate(fecha) || '—'}</div>
+  </div>`;
+}
+
+function applyFilters() {
+  const area   = document.getElementById('filter-area').value;
+  const prio   = document.getElementById('filter-prio').value;
+  const search = document.getElementById('filter-search').value.toLowerCase().trim();
+
+  const rows = document.querySelectorAll('.task-row');
+  let visible = 0;
+
+  rows.forEach(row => {
+    const matchArea   = !area   || row.dataset.area === area;
+    const matchPrio   = !prio   || row.dataset.prio === prio;
+    const matchSearch = !search || row.dataset.name.includes(search);
+    const show = matchArea && matchPrio && matchSearch;
+    row.style.display = show ? '' : 'none';
+    if (show) visible++;
+  });
+
+  document.getElementById('filter-count').textContent =
+    (area || prio || search) ? `${visible} resultado${visible !== 1 ? 's' : ''}` : '';
+}
+
+function updateStats() {
+  const pending = allTasks.filter(t => sel(t, 'Estado') !== 'Hecho');
+  const crit = pending.filter(t => sel(t, 'Prioridad') === 'Crítica').length;
+  const alta = pending.filter(t => sel(t, 'Prioridad') === 'Alta').length;
+  document.getElementById('stat-total').textContent = pending.length;
+  document.getElementById('stat-crit').textContent  = crit;
+  document.getElementById('stat-alta').textContent  = alta;
+}
+
+function updateFooter() {
+  const rows = document.querySelectorAll('.task-row');
+  document.getElementById('footer-count').textContent =
+    rows.length ? `${rows.length} tarea${rows.length !== 1 ? 's' : ''} pendiente${rows.length !== 1 ? 's' : ''}` : '';
+}
+
+// ══════════════════════════════════════════════
+//  RENDER OBJECTIVES
+// ══════════════════════════════════════════════
+function renderObjectives(objs) {
+  const active = objs.filter(o => sel(o, 'Estado') !== 'Completado');
+  if (!active.length) return;
+
+  const grid = document.getElementById('obj-grid');
+  grid.innerHTML = active.map(o => {
+    const area      = sel(o, 'Área');
+    const timeframe = sel(o, 'Timeframe');
+    const color     = AREA_COLORS[area] || '#888';
+    const icon      = AREA_ICONS[area] || '';
+    return `<div class="obj-card" style="--accent:${color}">
+      <div class="obj-area-label" style="color:${color}">${icon} ${h(area)}</div>
+      <div class="obj-timeframe">${h(timeframe)}</div>
       <div class="obj-text">${h(title(o, 'Objetivo'))}</div>
     </div>`;
-  });
+  }).join('');
 
-  if (mensuales.length || semanales.length) {
-    out += '<div class="obj-children">';
-
-    mensuales.forEach(o => {
-      out += `<div class="obj-child">
-        <div class="obj-child-tag">📅 Este mes</div>
-        <div class="obj-child-text">${h(title(o, 'Objetivo'))}</div>
-      </div>`;
-    });
-
-    semanales.forEach(o => {
-      const estado = sel(o, 'Estado');
-      out += `<div class="obj-child">
-        <div class="obj-child-tag">📋 Esta semana</div>
-        <div class="obj-child-text">${h(title(o, 'Objetivo'))}
-          ${estado === 'En progreso' ? `<span class="chip chip-blue" style="margin-left:6px">En progreso</span>` : ''}
-        </div>
-      </div>`;
-    });
-
-    out += '</div>';
-  }
-
-  out += '</div>';
-  return out;
+  document.getElementById('obj-section').style.display = '';
 }
 
-/* — Task list for one area — */
-function renderTasks(tareas, areaId, clienteMap) {
-  const items = sortByPrio(
-    tareas.filter(t => sel(t, 'Área') === areaId && sel(t, 'Estado') !== 'Hecho')
-  );
-
-  if (items.length === 0) {
-    return `<div class="empty">✓ Sin tareas pendientes</div>`;
-  }
-
-  let out = `<div class="tasks-label">Tareas pendientes (${items.length})</div>`;
-
-  items.forEach(t => {
-    const prio    = sel(t, 'Prioridad') || 'Normal';
-    const estado  = sel(t, 'Estado');
-    const fecha   = dt(t, 'Fecha');
-    const cIds    = rel(t, 'Cliente');
-    const cliente = cIds.length ? clienteMap[cIds[0]] : '';
-
-    out += `<div class="task">
-      <div class="task-dot prio-${h(prio)}"></div>
-      <div class="task-body">
-        <div class="task-name">${h(title(t, 'Tarea'))}</div>
-        <div class="task-meta">
-          ${fecha   ? `<span>${fmtDate(fecha)}</span>` : ''}
-          ${cliente ? `<span>· ${h(cliente)}</span>` : ''}
-          <span class="chip ${prio === 'Crítica' ? 'chip-red' : ''}">${h(prio)}</span>
-          <span class="chip">${h(estado)}</span>
-        </div>
-      </div>
-    </div>`;
-  });
-
-  return out;
-}
-
-/* — Client cards — */
-function renderClients(clientes) {
-  if (clientes.length === 0) {
-    return `<div class="empty">Sin clientes —
-      <a href="https://app.notion.com/p/bbeedd0068e640518c707ef9c9721b5c" target="_blank">
-        agregar en Notion →
-      </a>
-    </div>`;
-  }
-
-  let out = '<div class="clients">';
-
-  clientes.forEach(c => {
-    const nombre   = title(c, 'Nombre');
-    const estado   = sel(c,  'Estado');
-    const build    = txt(c,  'Qué se construye');
-    const link     = url(c,  'Link dashboard');
-    const delivery = dt(c,   'Próxima entrega');
-    const monto    = num(c,  'Monto');
-
-    out += `<div class="client">
-      <div class="client-name">${h(nombre)}</div>
-      ${build  ? `<div class="client-build">${h(build)}</div>` : '<div style="height:8px"></div>'}
-      <span class="status-tag s-${h(estado)}">${h(estado)}</span>
-      <div class="client-foot">
-        <div class="info">
-          ${delivery ? `📅 ${fmtDate(delivery)}<br>` : ''}
-          ${monto    ? fmtMoney(monto) : ''}
-        </div>
-        ${link ? `<a href="${h(link)}" target="_blank">Ver dashboard →</a>` : ''}
-      </div>
-    </div>`;
-  });
-
-  out += '</div>';
-  return out;
-}
-
-/* — Full area section — */
-function renderAreaFull(area, objetivos, tareas, clientes, clienteMap) {
-  const taskCount = tareas.filter(
-    t => sel(t, 'Área') === area.id && sel(t, 'Estado') !== 'Hecho'
-  ).length;
-
-  let body = renderObjectives(objetivos, area.id, area.color);
-  body += '<div class="sep"></div>';
-
-  if (area.showClients) {
-    body += `<div class="tasks-label" style="margin-bottom:12px">Clientes activos</div>`;
-    body += renderClients(clientes);
-    body += '<div class="sep"></div>';
-  }
-
-  body += renderTasks(tareas, area.id, clienteMap);
-
-  return `<div class="card" style="--accent:${area.color}">
-    <div class="card-header">
-      <span class="icon">${area.icon}</span>
-      <span class="title">${area.id}</span>
-      ${taskCount ? `<span class="count">${taskCount} tarea${taskCount > 1 ? 's' : ''}</span>` : ''}
-    </div>
-    <div class="card-body">${body}</div>
-  </div>`;
-}
-
-/* — Compact area section (Ejercicio, Lectura, Finanzas) — */
-function renderAreaCompact(area, objetivos, tareas, clienteMap) {
-  const taskCount = tareas.filter(
-    t => sel(t, 'Área') === area.id && sel(t, 'Estado') !== 'Hecho'
-  ).length;
-
-  let body = renderObjectives(objetivos, area.id, area.color);
-  body += '<div class="sep"></div>';
-  body += renderTasks(tareas, area.id, clienteMap);
-
-  return `<div class="card compact" style="--accent:${area.color}">
-    <div class="card-header">
-      <span class="icon">${area.icon}</span>
-      <span class="title">${area.id}</span>
-      ${taskCount ? `<span class="count">${taskCount}</span>` : ''}
-    </div>
-    <div class="card-body">${body}</div>
-  </div>`;
+// ══════════════════════════════════════════════
+//  OBJECTIVES TOGGLE
+// ══════════════════════════════════════════════
+function toggleObjectives() {
+  const toggle = document.getElementById('obj-toggle');
+  const body   = document.getElementById('obj-body');
+  toggle.classList.toggle('open');
+  body.classList.toggle('open');
 }
 
 // ══════════════════════════════════════════════
 //  MAIN RENDER
 // ══════════════════════════════════════════════
-function renderDashboard(objetivos, tareas, clientes) {
-  const clienteMap = {};
+function renderDashboard(tasks, clientes, objs) {
+  // build maps
   clientes.forEach(c => { clienteMap[c.id] = title(c, 'Nombre'); });
+  allTasks = tasks;
 
-  // Header stats
-  const active = tareas.filter(t => sel(t, 'Estado') !== 'Hecho').length;
-  const crit   = tareas.filter(t => sel(t, 'Estado') !== 'Hecho' && sel(t, 'Prioridad') === 'Crítica').length;
-  const alta   = tareas.filter(t => sel(t, 'Estado') !== 'Hecho' && sel(t, 'Prioridad') === 'Alta').length;
-  document.getElementById('stat-total').textContent = active;
-  document.getElementById('stat-crit').textContent  = crit;
-  document.getElementById('stat-alta').textContent  = alta;
-
-  let html = '';
-
-  // Full sections (Agencia, Trabajo)
-  AREAS.filter(a => a.full).forEach(area => {
-    html += renderAreaFull(area, objetivos, tareas, clientes, clienteMap);
-  });
-
-  // Compact row (Ejercicio, Lectura, Finanzas)
-  const compactAreas = AREAS.filter(a => !a.full);
-  if (compactAreas.length) {
-    html += '<div class="bottom-row">';
-    compactAreas.forEach(area => {
-      html += renderAreaCompact(area, objetivos, tareas, clienteMap);
+  // filter pending, sort by priority then date
+  const pending = tasks
+    .filter(t => sel(t, 'Estado') !== 'Hecho')
+    .sort((a, b) => {
+      const pd = (PRIO_ORDER[sel(a,'Prioridad')]??2) - (PRIO_ORDER[sel(b,'Prioridad')]??2);
+      if (pd !== 0) return pd;
+      const da = dt(a,'Fecha') || 'z';
+      const db = dt(b,'Fecha') || 'z';
+      return da.localeCompare(db);
     });
-    html += '</div>';
+
+  // render tasks
+  const list = document.getElementById('task-list');
+  if (pending.length === 0) {
+    list.innerHTML = `<div class="empty-row">🎉 Sin tareas pendientes — <a href="https://app.notion.com/p/85993516ae2f4829ade9be901fbea137" target="_blank">agregar en Notion →</a></div>`;
+  } else {
+    list.innerHTML = pending.map(renderTaskRow).join('');
   }
 
-  document.getElementById('dashboard').innerHTML = html;
+  // stats
+  updateStats();
+  updateFooter();
+
+  // objectives
+  renderObjectives(objs);
 }
 
 // ══════════════════════════════════════════════
@@ -649,35 +706,22 @@ async function loadDashboard() {
   btn.classList.add('spinning');
 
   try {
-    const [obj, tar, cli] = await Promise.all([
-      notionQuery(DB.objetivos, {
-        sorts: [{ property: 'Timeframe', direction: 'ascending' }],
-      }),
-      notionQuery(DB.tareas, {
-        sorts: [{ property: 'Prioridad', direction: 'ascending' }],
-      }),
+    const [tarRes, cliRes, objRes] = await Promise.all([
+      notionQuery(DB.tareas,    { sorts: [{ property: 'Prioridad', direction: 'ascending' }] }),
       notionQuery(DB.clientes),
+      notionQuery(DB.objetivos, { sorts: [{ property: 'Timeframe', direction: 'ascending' }] }),
     ]);
 
     renderDashboard(
-      obj.results || [],
-      tar.results || [],
-      cli.results || [],
+      tarRes.results || [],
+      cliRes.results || [],
+      objRes.results || [],
     );
   } catch (err) {
-    document.getElementById('dashboard').innerHTML = `
-      <div class="card" style="--accent:#ef4444">
-        <div class="card-header">
-          <span class="icon">⚠️</span>
-          <span class="title" style="color:#ef4444">Error de conexión</span>
-        </div>
-        <div class="card-body">
-          <p style="color:#777;font-size:14px;margin-bottom:8px">${h(err.message)}</p>
-          <p style="color:#555;font-size:13px">
-            Asegúrate de que <code>NOTION_TOKEN</code> esté configurado en Netlify
-            y que la integración tenga acceso a la página <strong>Life OS</strong>.
-          </p>
-        </div>
+    document.getElementById('task-list').innerHTML = `
+      <div class="empty-row">
+        ⚠️ Error de conexión: ${h(err.message)}<br>
+        <small style="color:#444">Asegúrate de que NOTION_TOKEN esté configurado en Netlify y que la integración tenga acceso a la página Life OS.</small>
       </div>`;
   } finally {
     btn.classList.remove('spinning');
