@@ -8,214 +8,209 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg:       #080808;
-      --card:     #111111;
-      --row-h:    #161616;
-      --border:   rgba(255,255,255,0.07);
-      --border-h: rgba(255,255,255,0.14);
-      --text:     #e2e2e2;
-      --sub:      #555;
-      --sub-l:    #777;
-      --agencia:   #4f9eff;
-      --trabajo:   #a855f7;
-      --ejercicio: #22c55e;
-      --lectura:   #f97316;
-      --finanzas:  #eab308;
-      --personal:  #ec4899;
-      --red:   #ef4444;
-      --amber: #f97316;
+      --bg:     #f3f4f6;
+      --card:   #ffffff;
+      --border: #e5e7eb;
+      --text:   #111827;
+      --sub:    #9ca3af;
+      --muted:  #6b7280;
       --r: 12px;
       --rs: 8px;
     }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Inter', -apple-system, sans-serif;
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
-      padding: 24px;
-      max-width: 1300px;
+      padding: 20px;
+      max-width: 860px;
       margin: 0 auto;
     }
-
+ 
     /* ── HEADER ── */
     header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: var(--r);
-      padding: 18px 24px;
-      margin-bottom: 12px;
+      padding: 16px 20px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
     }
-    .h-brand h1 { font-size: 19px; font-weight: 700; letter-spacing: -0.3px; }
-    .h-brand .date { font-size: 12px; color: var(--sub-l); margin-top: 3px; }
-    .h-stats { display: flex; gap: 24px; }
+    .h-brand h1 { font-size: 18px; font-weight: 700; }
+    .h-brand .date { font-size: 11px; color: var(--muted); margin-top: 3px; }
+    .h-stats { display: flex; gap: 22px; }
     .stat { text-align: center; }
-    .stat .n { font-size: 26px; font-weight: 700; line-height: 1; display: block; }
-    .stat .l { font-size: 10px; text-transform: uppercase; letter-spacing: 0.6px; color: var(--sub); margin-top: 3px; }
-    .stat.crit .n { color: var(--red); }
-    .stat.alta .n { color: var(--amber); }
-    .h-actions { display: flex; gap: 8px; }
+    .stat .n { font-size: 24px; font-weight: 700; line-height: 1; display: block; }
+    .stat .l { font-size: 9px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--sub); margin-top: 3px; }
+    .stat.crit .n { color: #ef4444; }
+    .stat.alta .n { color: #f97316; }
+    .h-actions { display: flex; gap: 6px; }
     .icon-btn {
-      background: none; border: 1px solid var(--border); color: var(--sub-l);
-      width: 36px; height: 36px; border-radius: var(--rs); cursor: pointer;
-      font-size: 16px; transition: all .2s; display: flex; align-items: center;
+      background: none; border: 1px solid var(--border); color: var(--muted);
+      width: 34px; height: 34px; border-radius: var(--rs); cursor: pointer;
+      font-size: 15px; transition: all .2s; display: flex; align-items: center;
       justify-content: center; text-decoration: none;
     }
-    .icon-btn:hover { border-color: var(--border-h); color: white; }
+    .icon-btn:hover { border-color: #d1d5db; color: var(--text); }
     .spinning { animation: spin .7s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
-
+ 
     /* ── TABS ── */
     .tabs-nav {
       display: flex; gap: 4px;
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: var(--r); padding: 4px; margin-bottom: 14px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 4px;
+      margin-bottom: 14px;
     }
     .tab-btn {
-      flex: 1; padding: 9px 16px; font-size: 13px; font-weight: 500;
-      border: none; background: transparent; color: var(--sub-l);
+      flex: 1; padding: 9px 12px; font-size: 13px; font-weight: 500;
+      border: none; background: transparent; color: var(--muted);
       border-radius: var(--rs); cursor: pointer; transition: all .2s;
       font-family: 'Inter', sans-serif;
     }
     .tab-btn:hover { color: var(--text); }
-    .tab-btn.active { background: var(--row-h); color: var(--text); border: 1px solid var(--border); }
+    .tab-btn.active { background: #111827; color: #ffffff; }
     .tab-pane { display: none; }
     .tab-pane.active { display: block; }
-
-    /* ── SECTION LABEL ── */
-    .section-label {
-      font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px;
-      color: var(--sub); margin: 0 0 10px; padding-left: 2px;
-    }
-
+ 
     /* ── WEEK BANNER ── */
     .week-banner {
+      font-size: 12px; color: var(--muted); font-weight: 500;
+      margin-bottom: 14px;
       display: flex; align-items: center; justify-content: space-between;
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: var(--r); padding: 10px 18px; margin-bottom: 14px;
-      font-size: 12px;
     }
-    .week-range { color: var(--sub-l); }
-    .week-right { display: flex; align-items: center; gap: 10px; }
-    .week-prog-track { width: 90px; height: 4px; background: rgba(255,255,255,.06); border-radius: 2px; overflow: hidden; }
-    .week-prog-fill { height: 100%; border-radius: 2px; background: #4ade80; transition: width .6s ease; }
-    .week-pct { font-size: 11px; color: var(--sub-l); min-width: 80px; text-align: right; }
-
-    /* ── OBJECTIVES GRID ── */
-    .obj-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 10px; margin-bottom: 20px;
+    .week-right { display: flex; align-items: center; gap: 8px; }
+    .week-prog-track {
+      width: 80px; height: 4px;
+      background: #e5e7eb; border-radius: 2px; overflow: hidden;
     }
-    .obj-card {
-      background: var(--card); border: 1px solid var(--border);
-      border-left: 3px solid transparent; border-radius: var(--r);
-      padding: 13px 15px;
-    }
-    .obj-area { font-size: 10px; text-transform: uppercase; letter-spacing: 0.6px; color: var(--sub); margin-bottom: 6px; }
-    .obj-text { font-size: 13px; color: var(--text); line-height: 1.45; }
-
-    /* ── FILTER BAR ── */
-    .filter-bar { display: flex; gap: 7px; margin-bottom: 12px; flex-wrap: wrap; align-items: center; }
+    .week-prog-fill { height: 100%; border-radius: 2px; background: #22c55e; transition: width .6s; }
+    .week-pct { font-size: 11px; color: var(--muted); }
+ 
+    /* ── FILTER CHIPS ── */
+    .filter-bar { display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; }
     .filter-chip {
-      padding: 4px 11px; border: 1px solid var(--border); border-radius: 20px;
-      font-size: 11px; font-weight: 500; cursor: pointer; background: none;
-      color: var(--sub-l); transition: all .2s; font-family: 'Inter', sans-serif;
+      padding: 5px 12px; border: 1px solid var(--border); border-radius: 20px;
+      font-size: 12px; font-weight: 500; cursor: pointer; background: var(--card);
+      color: var(--muted); transition: all .15s; font-family: 'Inter', sans-serif;
     }
-    .filter-chip:hover { border-color: var(--border-h); color: var(--text); }
-    .filter-chip.active { color: var(--text); background: var(--row-h); border-color: var(--border-h); }
-    .filter-count { margin-left: auto; font-size: 11px; color: var(--sub); }
-
-    /* ── TASK TABLE ── */
-    .task-table {
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: var(--r); overflow: hidden;
+    .filter-chip:hover { border-color: #d1d5db; color: var(--text); }
+    .filter-chip.active { background: #111827; color: white; border-color: #111827; }
+ 
+    /* ── AREA CARD ── */
+    .area-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      border-left: 4px solid transparent;
+      margin-bottom: 10px;
+      overflow: hidden;
     }
-    .task-header, .task-row {
-      display: grid;
-      grid-template-columns: 36px 1fr 110px 130px 90px 88px;
-      align-items: center;
-      padding: 9px 16px;
+    .area-card-hd {
+      display: flex; align-items: center; gap: 8px;
+      padding: 11px 16px;
+      border-bottom: 1px solid var(--border);
     }
-    .task-header {
-      font-size: 11px; text-transform: uppercase; letter-spacing: 0.6px;
-      color: var(--sub); border-bottom: 1px solid var(--border);
+    .area-icon { font-size: 15px; line-height: 1; }
+    .area-name { font-size: 13px; font-weight: 600; }
+    .area-obj-badge {
+      margin-left: auto;
+      font-size: 11px; font-weight: 500;
+      padding: 3px 10px;
+      border-radius: 20px;
+      max-width: 280px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex-shrink: 0;
     }
-    .task-row {
-      border-bottom: 1px solid var(--border); transition: background .15s;
+ 
+    /* ── TASK ROWS ── */
+    .task-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 16px;
+      border-bottom: 1px solid #f3f4f6;
+      transition: background .1s;
     }
-    .task-row:last-child { border-bottom: none; }
-    .task-row:hover { background: var(--row-h); }
-
+    .task-item:last-child { border-bottom: none; }
+    .task-item:hover { background: #f9fafb; }
+ 
     .check-btn {
-      width: 20px; height: 20px; border: 1.5px solid var(--sub);
-      border-radius: 5px; background: none; cursor: pointer;
+      width: 18px; height: 18px; flex-shrink: 0;
+      border: 1.5px solid #d1d5db;
+      border-radius: 4px; background: none; cursor: pointer;
       display: flex; align-items: center; justify-content: center;
-      transition: all .2s; font-size: 13px; color: transparent;
+      transition: all .15s; font-size: 11px; color: transparent;
     }
-    .check-btn:hover { border-color: #4ade80; color: #4ade80; }
+    .check-btn:hover { border-color: #22c55e; color: #22c55e; }
     .check-btn:hover::after { content: '✓'; }
-
-    .task-name { font-size: 13px; color: var(--text); line-height: 1.3; padding-right: 12px; }
-    .client-cell { font-size: 12px; color: var(--sub-l); }
-    .date-cell { font-size: 12px; color: var(--sub-l); }
-    .date-past { color: var(--red) !important; }
-
-    .area-badge {
-      display: inline-flex; align-items: center; gap: 5px;
-      font-size: 11px; font-weight: 500; padding: 3px 8px;
-      border-radius: 20px; border: 1px solid;
+ 
+    .prio-dot {
+      width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
     }
-    .area-dot { width: 5px; height: 5px; border-radius: 50%; }
-
-    .prio-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 500; }
-    .prio-dot { width: 6px; height: 6px; border-radius: 50%; }
-    .prio-Crítica .prio-dot { background: var(--red); }
-    .prio-Alta    .prio-dot { background: var(--amber); }
-    .prio-Normal  .prio-dot { background: var(--sub); }
-
-    .empty-state { padding: 36px; text-align: center; color: var(--sub); font-size: 13px; }
-
-    /* ── PROGRESS CARDS (6 Meses) ── */
+    .prio-dot.critica { background: #ef4444; }
+    .prio-dot.alta    { background: #f97316; }
+    .prio-dot.normal  { background: #d1d5db; }
+ 
+    .task-text { font-size: 13px; color: var(--text); line-height: 1.35; flex: 1; }
+    .task-date { font-size: 11px; color: var(--sub); flex-shrink: 0; }
+    .task-date.overdue { color: #ef4444; font-weight: 500; }
+    .task-no-date { font-size: 10px; color: #d1d5db; flex-shrink: 0; font-style: italic; }
+ 
+    .area-empty { padding: 11px 16px; font-size: 12px; color: var(--sub); }
+ 
+    /* ── BACKLOG ── */
+    .backlog-label {
+      font-size: 10px; text-transform: uppercase; letter-spacing: 0.7px;
+      color: var(--sub); margin: 20px 0 8px 2px;
+    }
+ 
+    /* ── 6 MESES PROGRESS ── */
+    .prog-label {
+      font-size: 10px; text-transform: uppercase; letter-spacing: 0.7px;
+      color: var(--sub); margin-bottom: 12px; padding-left: 2px;
+    }
     .prog-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-      gap: 12px; margin-bottom: 24px;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 10px;
     }
     .prog-card {
       background: var(--card); border: 1px solid var(--border);
-      border-radius: var(--r); padding: 18px 20px;
+      border-radius: var(--r); padding: 16px 18px;
     }
-    .prog-card-hd { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-    .prog-icon { font-size: 18px; }
-    .prog-area-name { font-size: 14px; font-weight: 600; }
-    .prog-target { margin-left: auto; font-size: 11px; color: var(--sub-l); text-align: right; max-width: 120px; line-height: 1.3; }
-    .prog-obj { font-size: 12px; color: var(--sub-l); line-height: 1.4; margin-bottom: 14px; }
-    .prog-track { background: rgba(255,255,255,.06); border-radius: 6px; height: 6px; overflow: hidden; }
+    .prog-card-hd { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+    .prog-icon { font-size: 16px; }
+    .prog-area-name { font-size: 13px; font-weight: 600; }
+    .prog-target { margin-left: auto; font-size: 11px; color: var(--muted); text-align: right; max-width: 110px; line-height: 1.3; }
+    .prog-obj { font-size: 11px; color: var(--muted); line-height: 1.4; margin-bottom: 12px; }
+    .prog-track { background: #e5e7eb; border-radius: 6px; height: 5px; overflow: hidden; }
     .prog-fill { height: 100%; border-radius: 6px; transition: width 1.2s ease; }
-    .prog-meta { display: flex; justify-content: space-between; margin-top: 8px; font-size: 11px; color: var(--sub); }
+    .prog-meta { display: flex; justify-content: space-between; margin-top: 6px; font-size: 11px; color: var(--muted); }
     .prog-pct { font-weight: 600; }
-
-    /* ── TOAST ── */
+ 
+    /* ── EMPTY / TOAST ── */
+    .empty-state { padding: 32px; text-align: center; color: var(--sub); font-size: 13px; }
     #toast {
-      position: fixed; bottom: 24px; right: 24px;
-      background: #1a1a1a; border: 1px solid var(--border-h);
+      position: fixed; bottom: 20px; right: 20px;
+      background: #111827; color: white;
       border-radius: var(--rs); padding: 10px 16px; font-size: 13px;
       opacity: 0; transform: translateY(8px); transition: all .3s;
       pointer-events: none; z-index: 999;
     }
     #toast.show { opacity: 1; transform: translateY(0); }
-
     @keyframes fadeOut { to { opacity: 0; transform: translateX(20px); } }
     .fading { animation: fadeOut .35s forwards; }
   </style>
 </head>
 <body>
-
+ 
 <header>
   <div class="h-brand">
     <h1>🧠 Life OS — Santi</h1>
@@ -231,27 +226,23 @@
     <a class="icon-btn" href="https://app.notion.com/p/38f722e4afcf81d5b83ec99ee67b5fd2" target="_blank" title="Abrir Notion">N</a>
   </div>
 </header>
-
+ 
 <nav class="tabs-nav">
-  <button class="tab-btn active" data-tab="semanal">⚡ Semanal</button>
-  <button class="tab-btn" data-tab="mensual">📅 Mensual</button>
   <button class="tab-btn" data-tab="semestral">🎯 6 Meses</button>
+  <button class="tab-btn" data-tab="mensual">📅 Mensual</button>
+  <button class="tab-btn active" data-tab="semanal">⚡ Semanal</button>
 </nav>
-
+ 
 <!-- ── SEMANAL ── -->
 <div id="tab-semanal" class="tab-pane active">
   <div class="week-banner">
-    <span id="week-range" class="week-range"></span>
+    <span id="week-range"></span>
     <div class="week-right">
       <div class="week-prog-track"><div class="week-prog-fill" id="week-prog-fill" style="width:0%"></div></div>
       <span class="week-pct" id="week-pct">0% completado</span>
     </div>
   </div>
-
-  <p class="section-label">Objetivos de la semana</p>
-  <div class="obj-grid" id="objs-semanal"></div>
-
-  <p class="section-label">Tareas esta semana</p>
+ 
   <div class="filter-bar" id="filter-bar-semanal">
     <button class="filter-chip active" data-tab="semanal" data-area="">Todas</button>
     <button class="filter-chip" data-tab="semanal" data-area="Agencia">🏢 Agencia</button>
@@ -260,24 +251,18 @@
     <button class="filter-chip" data-tab="semanal" data-area="Finanzas">💰 Finanzas</button>
     <button class="filter-chip" data-tab="semanal" data-area="Lectura">📚 Lectura</button>
     <button class="filter-chip" data-tab="semanal" data-area="Personal">🏠 Personal</button>
-    <span class="filter-count" id="count-semanal"></span>
   </div>
-  <div class="task-table" id="tasks-semanal">
-    <div class="empty-state">Cargando…</div>
-  </div>
-
-  <div style="margin-top: 20px;">
-    <p class="section-label">Sin fecha programada</p>
-    <div class="task-table" id="tasks-backlog"></div>
+ 
+  <div id="areas-semanal"><div class="empty-state">Cargando…</div></div>
+ 
+  <div id="backlog-section" style="display:none">
+    <p class="backlog-label">Sin fecha programada</p>
+    <div id="areas-backlog"></div>
   </div>
 </div>
-
+ 
 <!-- ── MENSUAL ── -->
 <div id="tab-mensual" class="tab-pane">
-  <p class="section-label">Objetivos del mes</p>
-  <div class="obj-grid" id="objs-mensual"></div>
-
-  <p class="section-label">Tareas este mes</p>
   <div class="filter-bar" id="filter-bar-mensual">
     <button class="filter-chip active" data-tab="mensual" data-area="">Todas</button>
     <button class="filter-chip" data-tab="mensual" data-area="Agencia">🏢 Agencia</button>
@@ -286,25 +271,22 @@
     <button class="filter-chip" data-tab="mensual" data-area="Finanzas">💰 Finanzas</button>
     <button class="filter-chip" data-tab="mensual" data-area="Lectura">📚 Lectura</button>
     <button class="filter-chip" data-tab="mensual" data-area="Personal">🏠 Personal</button>
-    <span class="filter-count" id="count-mensual"></span>
   </div>
-  <div class="task-table" id="tasks-mensual"></div>
+  <div id="areas-mensual"><div class="empty-state">Cargando…</div></div>
 </div>
-
+ 
 <!-- ── 6 MESES ── -->
 <div id="tab-semestral" class="tab-pane">
-  <p class="section-label">Progreso — Julio 2026 → Enero 2027</p>
+  <p class="prog-label">Julio 2026 → Enero 2027</p>
   <div class="prog-grid" id="prog-semestral"></div>
-  <p class="section-label">Objetivos anuales</p>
-  <div class="obj-grid" id="objs-semestral"></div>
 </div>
-
+ 
 <div id="toast"></div>
-
+ 
 <script>
-// ══════════════════════════════════════════════
+// ════════════════════════════════
 //  CONFIG
-// ══════════════════════════════════════════════
+// ════════════════════════════════
 const DB = {
   clientes:  'bbeedd0068e640518c707ef9c9721b5c',
   objetivos: '6020a66ec0954a489031516597ac9fb1',
@@ -329,18 +311,20 @@ const SEMESTRAL_TARGETS = {
   Personal:  'Boda planeada',
 };
 const NOTION_URL = '/.netlify/functions/notion';
-
-// ══════════════════════════════════════════════
+ 
+// ════════════════════════════════
 //  STATE
-// ══════════════════════════════════════════════
-let allTasks = [];        // pending only
-let allFetched = [];      // all (for progress %)
-let clienteMap = {};
+// ════════════════════════════════
+let allTasks     = [];
+let allFetched   = [];
+let allObjetivos = [];
+let clienteMap   = {};
+let doneIds      = new Set();
 let activeFilter = { semanal: '', mensual: '' };
-
-// ══════════════════════════════════════════════
+ 
+// ════════════════════════════════
 //  NOTION API
-// ══════════════════════════════════════════════
+// ════════════════════════════════
 async function notionQuery(dbId) {
   const r = await fetch(NOTION_URL, {
     method: 'POST',
@@ -351,7 +335,7 @@ async function notionQuery(dbId) {
   if (!r.ok) throw new Error(d.message || d.error || 'Error Notion');
   return d.results || [];
 }
-
+ 
 async function notionPatch(pageId, properties) {
   const r = await fetch(NOTION_URL, {
     method: 'POST',
@@ -360,20 +344,20 @@ async function notionPatch(pageId, properties) {
   });
   if (!r.ok) { const d = await r.json(); throw new Error(d.message || 'Patch error'); }
 }
-
-// ══════════════════════════════════════════════
+ 
+// ════════════════════════════════
 //  PROPERTY HELPERS
-// ══════════════════════════════════════════════
-const prop  = (p, k) => p.properties?.[k];
-const ttl   = (p, k) => prop(p, k)?.title?.[0]?.plain_text || '';
-const sel   = (p, k) => prop(p, k)?.select?.name || '';
-const dt    = (p, k) => prop(p, k)?.date?.start || '';
-const rel   = (p, k) => prop(p, k)?.relation?.map(r => r.id) || [];
-const h     = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-
-// ══════════════════════════════════════════════
+// ════════════════════════════════
+const prop = (p, k) => p.properties?.[k];
+const ttl  = (p, k) => prop(p, k)?.title?.[0]?.plain_text || '';
+const sel  = (p, k) => prop(p, k)?.select?.name || '';
+const dt   = (p, k) => prop(p, k)?.date?.start || '';
+const rel  = (p, k) => prop(p, k)?.relation?.map(r => r.id) || [];
+const h    = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+ 
+// ════════════════════════════════
 //  DATE UTILS
-// ══════════════════════════════════════════════
+// ════════════════════════════════
 function weekRange() {
   const now = new Date(), day = now.getDay();
   const diff = day === 0 ? -6 : 1 - day;
@@ -383,13 +367,13 @@ function weekRange() {
 }
 function isThisWeek(d) {
   if (!d) return false;
-  const dt = new Date(d + 'T12:00:00'), { s, e } = weekRange();
-  return dt >= s && dt <= e;
+  const ts = new Date(d + 'T12:00:00'), { s, e } = weekRange();
+  return ts >= s && ts <= e;
 }
 function isThisMonth(d) {
   if (!d) return false;
-  const dt = new Date(d + 'T12:00:00'), now = new Date();
-  return dt.getMonth() === now.getMonth() && dt.getFullYear() === now.getFullYear();
+  const ts = new Date(d + 'T12:00:00'), now = new Date();
+  return ts.getMonth() === now.getMonth() && ts.getFullYear() === now.getFullYear();
 }
 function isOverdue(d) {
   if (!d) return false;
@@ -397,55 +381,53 @@ function isOverdue(d) {
 }
 function fmtDate(d) {
   if (!d) return '';
-  return new Date(d + 'T12:00:00').toLocaleDateString('es-CO', { day: 'numeric', month: 'short' });
+  return new Date(d + 'T12:00:00').toLocaleDateString('es-CO', { weekday:'short', day:'numeric', month:'short' });
 }
 function fmtWeekRange() {
   const { s, e } = weekRange(), o = { day:'numeric', month:'short' };
-  return `${s.toLocaleDateString('es-CO',o)} – ${e.toLocaleDateString('es-CO',o)}`;
+  const wn = Math.ceil(((new Date() - new Date(new Date().getFullYear(),0,1)) / 86400000 + new Date(new Date().getFullYear(),0,1).getDay() + 1) / 7);
+  return `Semana ${wn} · ${s.toLocaleDateString('es-CO',o)} – ${e.toLocaleDateString('es-CO',o)}`;
 }
-function weekNumber() {
-  const now = new Date(), s = new Date(now.getFullYear(),0,1);
-  return Math.ceil(((now - s) / 86400000 + s.getDay() + 1) / 7);
-}
-
-// ══════════════════════════════════════════════
+ 
+// ════════════════════════════════
 //  TOAST
-// ══════════════════════════════════════════════
+// ════════════════════════════════
 function toast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg; t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2800);
 }
-
-// ══════════════════════════════════════════════
+ 
+// ════════════════════════════════
 //  CHECK TASK
-// ══════════════════════════════════════════════
+// ════════════════════════════════
 async function checkTask(pageId, btn) {
   btn.innerHTML = '✓';
-  btn.style.cssText += 'border-color:#4ade80;color:#4ade80;';
+  btn.style.cssText += 'border-color:#22c55e;color:#22c55e;';
   btn.disabled = true;
-  const row = btn.closest('.task-row');
-  row.style.opacity = '.4';
+  const item = btn.closest('.task-item');
+  item.style.opacity = '.4';
   try {
     await notionPatch(pageId, { Estado: { select: { name: 'Hecho' } } });
     toast('✅ Tarea marcada como hecha en Notion');
-    row.classList.add('fading');
+    item.classList.add('fading');
+    doneIds.add(pageId);
     setTimeout(() => {
-      row.remove();
+      item.remove();
       allTasks = allTasks.filter(t => t.id !== pageId);
       updateStats();
       updateWeekProgress();
     }, 380);
   } catch(e) {
     btn.innerHTML = ''; btn.style.cssText = ''; btn.disabled = false;
-    row.style.opacity = '1';
+    item.style.opacity = '1';
     toast('⚠️ Error al actualizar');
   }
 }
-
-// ══════════════════════════════════════════════
+ 
+// ════════════════════════════════
 //  TABS
-// ══════════════════════════════════════════════
+// ════════════════════════════════
 document.querySelectorAll('.tab-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     const tab = btn.dataset.tab;
@@ -454,203 +436,231 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
     document.getElementById(`tab-${tab}`).classList.add('active');
   });
 });
-
-// ══════════════════════════════════════════════
+ 
+// ════════════════════════════════
 //  FILTER CHIPS
-// ══════════════════════════════════════════════
+// ════════════════════════════════
 document.querySelectorAll('.filter-chip').forEach(chip => {
   chip.addEventListener('click', () => {
     const tab = chip.dataset.tab, area = chip.dataset.area;
     activeFilter[tab] = area;
     document.querySelectorAll(`.filter-chip[data-tab="${tab}"]`)
       .forEach(c => c.classList.toggle('active', c.dataset.area === area));
-    renderTable(tab);
+    // Show/hide area cards
+    const containers = tab === 'semanal'
+      ? ['areas-semanal', 'areas-backlog']
+      : [`areas-${tab}`];
+    containers.forEach(cid => {
+      document.querySelectorAll(`#${cid} .area-card`).forEach(card => {
+        card.style.display = (!area || card.dataset.area === area) ? '' : 'none';
+      });
+    });
   });
 });
-
-// ══════════════════════════════════════════════
-//  RENDER TASK ROW
-// ══════════════════════════════════════════════
-function taskRow(task) {
-  const id     = task.id;
-  const name   = ttl(task, 'Tarea');
-  const area   = sel(task, 'Área');
-  const prio   = sel(task, 'Prioridad') || 'Normal';
-  const fecha  = dt(task, 'Fecha');
-  const cIds   = rel(task, 'Cliente');
-  const client = cIds.length ? (clienteMap[cIds[0]] || '—') : '—';
-  const color  = AREA_COLORS[area] || '#888';
-  const over   = isOverdue(fecha);
-  return `<div class="task-row" data-area="${h(area)}">
-    <div><button class="check-btn" onclick="checkTask('${h(id)}',this)"></button></div>
-    <div class="task-name">${h(name)}</div>
-    <div><span class="area-badge" style="color:${color};border-color:${color}33">
-      <span class="area-dot" style="background:${color}"></span>${h(area)}
-    </span></div>
-    <div class="client-cell">${h(client)}</div>
-    <div><span class="prio-badge prio-${h(prio)}"><span class="prio-dot"></span>${h(prio)}</span></div>
-    <div class="date-cell ${over?'date-past':''}">${fmtDate(fecha)||'—'}</div>
+ 
+// ════════════════════════════════
+//  BUILD TASK ITEM HTML
+// ════════════════════════════════
+function taskItemHtml(task) {
+  const id    = task.id;
+  const name  = ttl(task, 'Tarea');
+  const prio  = sel(task, 'Prioridad') || 'Normal';
+  const fecha = dt(task, 'Fecha');
+  const over  = fecha && isOverdue(fecha);
+  const prioClass = prio === 'Crítica' ? 'critica' : prio === 'Alta' ? 'alta' : 'normal';
+  const dateHtml = fecha
+    ? `<span class="task-date ${over ? 'overdue' : ''}">${fmtDate(fecha)}</span>`
+    : `<span class="task-no-date">sin fecha</span>`;
+  return `<div class="task-item" data-id="${h(id)}">
+    <button class="check-btn" onclick="checkTask('${h(id)}',this)"></button>
+    <span class="prio-dot ${prioClass}"></span>
+    <span class="task-text">${h(name)}</span>
+    ${dateHtml}
   </div>`;
 }
-
-// ══════════════════════════════════════════════
-//  RENDER TABLE
-// ══════════════════════════════════════════════
-function renderTable(tab) {
-  const area = activeFilter[tab] || '';
-  let tasks;
-
-  if (tab === 'semanal') {
-    tasks = allTasks.filter(t => isThisWeek(dt(t,'Fecha')));
-    // Backlog (no date)
-    const backlog = allTasks.filter(t => !dt(t,'Fecha'));
-    renderContainer('tasks-backlog', backlog, '');
-  } else {
-    tasks = allTasks.filter(t => isThisMonth(dt(t,'Fecha')));
-  }
-
-  renderContainer(`tasks-${tab}`, tasks, area);
-
-  const visible = area ? tasks.filter(t => sel(t,'Área') === area).length : tasks.length;
-  const el = document.getElementById(`count-${tab}`);
-  if (el) el.textContent = area ? `${visible} tarea${visible !== 1 ? 's' : ''}` : '';
+ 
+// ════════════════════════════════
+//  BUILD AREA CARD HTML
+// ════════════════════════════════
+function areaCardHtml(area, tasks, objText) {
+  const color = AREA_COLORS[area] || '#888';
+  const icon  = AREA_ICONS[area]  || '•';
+  const clean = objText.replace(/^\[.*?\]\s*/, ''); // strip [SEM 1 JUL] etc.
+  const badge = clean.length > 55 ? clean.slice(0,53) + '…' : clean;
+ 
+  const sorted = [...tasks].sort((a,b) =>
+    (PRIO_ORDER[sel(a,'Prioridad')] ?? 2) - (PRIO_ORDER[sel(b,'Prioridad')] ?? 2)
+  );
+ 
+  return `<div class="area-card" data-area="${h(area)}" style="border-left-color:${color}">
+    <div class="area-card-hd">
+      <span class="area-icon">${icon}</span>
+      <span class="area-name" style="color:${color}">${h(area)}</span>
+      ${badge ? `<span class="area-obj-badge" style="color:${color};background:${color}18">${h(badge)}</span>` : ''}
+    </div>
+    ${sorted.length
+      ? sorted.map(taskItemHtml).join('')
+      : '<div class="area-empty">Sin tareas programadas esta semana</div>'
+    }
+  </div>`;
 }
-
-function renderContainer(id, tasks, area) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  const filtered = area ? tasks.filter(t => sel(t,'Área') === area) : tasks;
-  const sorted = [...filtered].sort((a,b) => {
-    const pd = (PRIO_ORDER[sel(a,'Prioridad')]??2) - (PRIO_ORDER[sel(b,'Prioridad')]??2);
-    if (pd !== 0) return pd;
-    return (dt(a,'Fecha')||'9999').localeCompare(dt(b,'Fecha')||'9999');
-  });
-  if (!sorted.length) {
-    el.innerHTML = `<div class="empty-state">${id === 'tasks-backlog' ? 'Todas las tareas tienen fecha 🎉' : 'No hay tareas pendientes aquí 🎉'}</div>`;
-    return;
-  }
-  el.innerHTML = `<div class="task-header"><div></div><div>Tarea</div><div>Área</div><div>Cliente</div><div>Prioridad</div><div>Fecha</div></div>` +
-    sorted.map(taskRow).join('');
-}
-
-// ══════════════════════════════════════════════
-//  RENDER OBJECTIVES
-// ══════════════════════════════════════════════
-function renderObjs(objs, containerId, timeframe) {
+ 
+// ════════════════════════════════
+//  RENDER AREA GROUPS
+// ════════════════════════════════
+function renderAreaGroups(tab, containerId, timeframe) {
   const el = document.getElementById(containerId);
   if (!el) return;
-  const filtered = objs
-    .filter(o => sel(o,'Timeframe') === timeframe && sel(o,'Estado') === 'En progreso')
-    .sort((a,b) => AREA_ORDER.indexOf(sel(a,'Área')) - AREA_ORDER.indexOf(sel(b,'Área')));
-  if (!filtered.length) { el.innerHTML = '<p style="color:var(--sub);font-size:12px">Sin objetivos configurados.</p>'; return; }
-  el.innerHTML = filtered.map(o => {
-    const area  = sel(o,'Área');
-    const color = AREA_COLORS[area] || '#888';
-    const icon  = AREA_ICONS[area] || '•';
-    return `<div class="obj-card" style="border-left-color:${color}">
-      <div class="obj-area">${icon} ${h(area)}</div>
-      <div class="obj-text">${h(ttl(o,'Objetivo'))}</div>
-    </div>`;
-  }).join('');
+ 
+  const isWeek  = tab === 'semanal';
+  const filterFn = isWeek ? isThisWeek : isThisMonth;
+ 
+  // Objectives for this timeframe that are En progreso
+  const objs = allObjetivos.filter(o =>
+    sel(o,'Timeframe') === timeframe && sel(o,'Estado') === 'En progreso'
+  );
+ 
+  let html = '';
+  for (const area of AREA_ORDER) {
+    const tasks = allTasks
+      .filter(t => sel(t,'Área') === area && filterFn(dt(t,'Fecha')));
+ 
+    const obj = objs.find(o => sel(o,'Área') === area);
+    const objText = obj ? ttl(obj,'Objetivo') : '';
+ 
+    if (!tasks.length && !objText) continue;
+    html += areaCardHtml(area, tasks, objText);
+  }
+ 
+  el.innerHTML = html || '<div class="empty-state">No hay tareas pendientes 🎉</div>';
+ 
+  // Re-apply current filter
+  const area = activeFilter[tab] || '';
+  if (area) {
+    el.querySelectorAll('.area-card').forEach(card => {
+      card.style.display = card.dataset.area === area ? '' : 'none';
+    });
+  }
 }
-
-// ══════════════════════════════════════════════
+ 
+// ════════════════════════════════
+//  RENDER BACKLOG (no date)
+// ════════════════════════════════
+function renderBacklog() {
+  const backlogTasks = allTasks.filter(t => !dt(t,'Fecha'));
+  const section = document.getElementById('backlog-section');
+  const el = document.getElementById('areas-backlog');
+  if (!el || !section) return;
+ 
+  if (!backlogTasks.length) { section.style.display = 'none'; return; }
+  section.style.display = '';
+ 
+  let html = '';
+  for (const area of AREA_ORDER) {
+    const tasks = backlogTasks.filter(t => sel(t,'Área') === area);
+    if (!tasks.length) continue;
+    html += areaCardHtml(area, tasks, '');
+  }
+  el.innerHTML = html || '';
+}
+ 
+// ════════════════════════════════
 //  RENDER 6 MESES PROGRESS
-// ══════════════════════════════════════════════
-function renderProgress(anualObjs) {
+// ════════════════════════════════
+function renderProgress() {
   const el = document.getElementById('prog-semestral');
   if (!el) return;
   el.innerHTML = AREA_ORDER.map(area => {
     const color   = AREA_COLORS[area] || '#888';
-    const icon    = AREA_ICONS[area] || '•';
+    const icon    = AREA_ICONS[area]  || '•';
     const aTask   = allFetched.filter(t => sel(t,'Área') === area);
-    const done    = aTask.filter(t => sel(t,'Estado') === 'Hecho');
+    const done    = aTask.filter(t => sel(t,'Estado') === 'Hecho' || doneIds.has(t.id));
     const pct     = aTask.length ? Math.round(done.length / aTask.length * 100) : 0;
-    const obj     = anualObjs.find(o => sel(o,'Área') === area && sel(o,'Timeframe') === 'Anual');
-    const objText = obj ? ttl(obj,'Objetivo') : '';
+    const obj     = allObjetivos.find(o => sel(o,'Área') === area && sel(o,'Timeframe') === 'Anual');
+    const rawText = obj ? ttl(obj,'Objetivo').replace(/^\[.*?\]\s*/, '') : '';
+    const objText = rawText.length > 80 ? rawText.slice(0,78) + '…' : rawText;
     const target  = SEMESTRAL_TARGETS[area] || '';
     return `<div class="prog-card">
       <div class="prog-card-hd">
-        <div class="prog-icon">${icon}</div>
-        <div class="prog-area-name" style="color:${color}">${h(area)}</div>
-        <div class="prog-target">${h(target)}</div>
+        <span class="prog-icon">${icon}</span>
+        <span class="prog-area-name" style="color:${color}">${h(area)}</span>
+        <span class="prog-target">${h(target)}</span>
       </div>
       ${objText ? `<div class="prog-obj">${h(objText)}</div>` : ''}
       <div class="prog-track"><div class="prog-fill" style="width:${pct}%;background:${color}"></div></div>
       <div class="prog-meta">
-        <span>${done.length}/${aTask.length} tareas completadas</span>
+        <span>${done.length}/${aTask.length} tareas</span>
         <span class="prog-pct" style="color:${color}">${pct}%</span>
       </div>
     </div>`;
   }).join('');
 }
-
-// ══════════════════════════════════════════════
+ 
+// ════════════════════════════════
 //  STATS + WEEK PROGRESS
-// ══════════════════════════════════════════════
+// ════════════════════════════════
 function updateStats() {
   const week = allTasks.filter(t => isThisWeek(dt(t,'Fecha')));
   document.getElementById('stat-total').textContent = week.length;
   document.getElementById('stat-crit').textContent  = week.filter(t => sel(t,'Prioridad') === 'Crítica').length;
   document.getElementById('stat-alta').textContent  = week.filter(t => sel(t,'Prioridad') === 'Alta').length;
 }
-
+ 
 function updateWeekProgress() {
   const weekAll  = allFetched.filter(t => isThisWeek(dt(t,'Fecha')));
-  const weekDone = weekAll.filter(t => sel(t,'Estado') === 'Hecho');
+  const weekDone = weekAll.filter(t => sel(t,'Estado') === 'Hecho' || doneIds.has(t.id));
   const pct = weekAll.length ? Math.round(weekDone.length / weekAll.length * 100) : 0;
   document.getElementById('week-prog-fill').style.width = pct + '%';
   document.getElementById('week-pct').textContent = pct + '% completado';
 }
-
-// ══════════════════════════════════════════════
+ 
+// ════════════════════════════════
 //  LOAD DASHBOARD
-// ══════════════════════════════════════════════
+// ════════════════════════════════
 async function loadDashboard() {
   const btn = document.getElementById('refresh-btn');
   btn.classList.add('spinning');
-  document.getElementById('tasks-semanal').innerHTML = '<div class="empty-state">Cargando…</div>';
-
+  document.getElementById('areas-semanal').innerHTML = '<div class="empty-state">Cargando…</div>';
+  doneIds = new Set();
+ 
   try {
     const [clientes, objetivos, tareas] = await Promise.all([
       notionQuery(DB.clientes),
       notionQuery(DB.objetivos),
       notionQuery(DB.tareas),
     ]);
-
-    clienteMap = {};
+ 
+    clienteMap   = {};
     clientes.forEach(c => { clienteMap[c.id] = ttl(c,'Nombre'); });
-
-    allFetched = tareas;
-    allTasks   = tareas.filter(t => sel(t,'Estado') !== 'Hecho');
-
-    renderObjs(objetivos, 'objs-semanal',   'Semanal');
-    renderObjs(objetivos, 'objs-mensual',   'Mensual');
-    renderObjs(objetivos, 'objs-semestral', 'Anual');
-    renderProgress(objetivos);
-    renderTable('semanal');
-    renderTable('mensual');
+ 
+    allObjetivos = objetivos;
+    allFetched   = tareas;
+    allTasks     = tareas.filter(t => sel(t,'Estado') !== 'Hecho');
+ 
+    renderAreaGroups('semanal', 'areas-semanal', 'Semanal');
+    renderAreaGroups('mensual', 'areas-mensual', 'Mensual');
+    renderBacklog();
+    renderProgress();
     updateStats();
     updateWeekProgress();
-
+ 
     document.getElementById('week-range').textContent = fmtWeekRange();
-
+ 
   } catch(e) {
-    document.getElementById('tasks-semanal').innerHTML =
-      `<div class="empty-state">⚠️ Error de conexión<br><small style="color:var(--sub);margin-top:4px;display:block">${h(e.message)}</small></div>`;
+    document.getElementById('areas-semanal').innerHTML =
+      `<div class="empty-state">⚠️ Error de conexión<br><small style="color:#9ca3af;margin-top:6px;display:block">${h(e.message)}</small></div>`;
   }
-
+ 
   btn.classList.remove('spinning');
 }
-
-// ══════════════════════════════════════════════
+ 
+// ════════════════════════════════
 //  INIT
-// ══════════════════════════════════════════════
+// ════════════════════════════════
 document.addEventListener('DOMContentLoaded', () => {
   const now = new Date();
   document.getElementById('header-date').textContent =
-    now.toLocaleDateString('es-CO', { weekday:'long', year:'numeric', month:'long', day:'numeric' }) +
-    ' · Semana ' + weekNumber();
+    now.toLocaleDateString('es-CO', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
   loadDashboard();
 });
 </script>
