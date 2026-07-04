@@ -27,7 +27,7 @@
       max-width: 860px;
       margin: 0 auto;
     }
- 
+
     /* ── HEADER ── */
     header {
       background: var(--card);
@@ -58,7 +58,7 @@
     .icon-btn:hover { border-color: #d1d5db; color: var(--text); }
     .spinning { animation: spin .7s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
- 
+
     /* ── TABS ── */
     .tabs-nav {
       display: flex; gap: 4px;
@@ -78,7 +78,7 @@
     .tab-btn.active { background: #111827; color: #ffffff; }
     .tab-pane { display: none; }
     .tab-pane.active { display: block; }
- 
+
     /* ── WEEK BANNER ── */
     .week-banner {
       font-size: 12px; color: var(--muted); font-weight: 500;
@@ -92,7 +92,7 @@
     }
     .week-prog-fill { height: 100%; border-radius: 2px; background: #22c55e; transition: width .6s; }
     .week-pct { font-size: 11px; color: var(--muted); }
- 
+
     /* ── FILTER CHIPS ── */
     .filter-bar { display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; }
     .filter-chip {
@@ -102,7 +102,7 @@
     }
     .filter-chip:hover { border-color: #d1d5db; color: var(--text); }
     .filter-chip.active { background: #111827; color: white; border-color: #111827; }
- 
+
     /* ── AREA CARD ── */
     .area-card {
       background: var(--card);
@@ -130,7 +130,7 @@
       text-overflow: ellipsis;
       flex-shrink: 0;
     }
- 
+
     /* ── TASK ROWS ── */
     .task-item {
       display: flex; align-items: center; gap: 10px;
@@ -140,7 +140,7 @@
     }
     .task-item:last-child { border-bottom: none; }
     .task-item:hover { background: #f9fafb; }
- 
+
     .check-btn {
       width: 18px; height: 18px; flex-shrink: 0;
       border: 1.5px solid #d1d5db;
@@ -150,27 +150,27 @@
     }
     .check-btn:hover { border-color: #22c55e; color: #22c55e; }
     .check-btn:hover::after { content: '✓'; }
- 
+
     .prio-dot {
       width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
     }
     .prio-dot.critica { background: #ef4444; }
     .prio-dot.alta    { background: #f97316; }
     .prio-dot.normal  { background: #d1d5db; }
- 
+
     .task-text { font-size: 13px; color: var(--text); line-height: 1.35; flex: 1; }
     .task-date { font-size: 11px; color: var(--sub); flex-shrink: 0; }
     .task-date.overdue { color: #ef4444; font-weight: 500; }
     .task-no-date { font-size: 10px; color: #d1d5db; flex-shrink: 0; font-style: italic; }
- 
+
     .area-empty { padding: 11px 16px; font-size: 12px; color: var(--sub); }
- 
+
     /* ── BACKLOG ── */
     .backlog-label {
       font-size: 10px; text-transform: uppercase; letter-spacing: 0.7px;
       color: var(--sub); margin: 20px 0 8px 2px;
     }
- 
+
     /* ── 6 MESES PROGRESS ── */
     .prog-label {
       font-size: 10px; text-transform: uppercase; letter-spacing: 0.7px;
@@ -194,7 +194,7 @@
     .prog-fill { height: 100%; border-radius: 6px; transition: width 1.2s ease; }
     .prog-meta { display: flex; justify-content: space-between; margin-top: 6px; font-size: 11px; color: var(--muted); }
     .prog-pct { font-weight: 600; }
- 
+
     /* ── EMPTY / TOAST ── */
     .empty-state { padding: 32px; text-align: center; color: var(--sub); font-size: 13px; }
     #toast {
@@ -210,7 +210,7 @@
   </style>
 </head>
 <body>
- 
+
 <header>
   <div class="h-brand">
     <h1>🧠 Life OS — Santi</h1>
@@ -226,13 +226,13 @@
     <a class="icon-btn" href="https://app.notion.com/p/38f722e4afcf81d5b83ec99ee67b5fd2" target="_blank" title="Abrir Notion">N</a>
   </div>
 </header>
- 
+
 <nav class="tabs-nav">
   <button class="tab-btn" data-tab="semestral">🎯 6 Meses</button>
   <button class="tab-btn" data-tab="mensual">📅 Mensual</button>
   <button class="tab-btn active" data-tab="semanal">⚡ Semanal</button>
 </nav>
- 
+
 <!-- ── SEMANAL ── -->
 <div id="tab-semanal" class="tab-pane active">
   <div class="week-banner">
@@ -242,7 +242,7 @@
       <span class="week-pct" id="week-pct">0% completado</span>
     </div>
   </div>
- 
+
   <div class="filter-bar" id="filter-bar-semanal">
     <button class="filter-chip active" data-tab="semanal" data-area="">Todas</button>
     <button class="filter-chip" data-tab="semanal" data-area="Agencia">🏢 Agencia</button>
@@ -252,15 +252,15 @@
     <button class="filter-chip" data-tab="semanal" data-area="Lectura">📚 Lectura</button>
     <button class="filter-chip" data-tab="semanal" data-area="Personal">🏠 Personal</button>
   </div>
- 
+
   <div id="areas-semanal"><div class="empty-state">Cargando…</div></div>
- 
+
   <div id="backlog-section" style="display:none">
     <p class="backlog-label">Sin fecha programada</p>
     <div id="areas-backlog"></div>
   </div>
 </div>
- 
+
 <!-- ── MENSUAL ── -->
 <div id="tab-mensual" class="tab-pane">
   <div class="filter-bar" id="filter-bar-mensual">
@@ -274,15 +274,15 @@
   </div>
   <div id="areas-mensual"><div class="empty-state">Cargando…</div></div>
 </div>
- 
+
 <!-- ── 6 MESES ── -->
 <div id="tab-semestral" class="tab-pane">
   <p class="prog-label">Julio 2026 → Enero 2027</p>
   <div class="prog-grid" id="prog-semestral"></div>
 </div>
- 
+
 <div id="toast"></div>
- 
+
 <script>
 // ════════════════════════════════
 //  CONFIG
@@ -311,7 +311,7 @@ const SEMESTRAL_TARGETS = {
   Personal:  'Boda planeada',
 };
 const NOTION_URL = '/.netlify/functions/notion';
- 
+
 // ════════════════════════════════
 //  STATE
 // ════════════════════════════════
@@ -321,21 +321,28 @@ let allObjetivos = [];
 let clienteMap   = {};
 let doneIds      = new Set();
 let activeFilter = { semanal: '', mensual: '' };
- 
+
 // ════════════════════════════════
 //  NOTION API
 // ════════════════════════════════
 async function notionQuery(dbId) {
-  const r = await fetch(NOTION_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ endpoint: `databases/${dbId}/query`, method: 'POST', body: { page_size: 100 } }),
-  });
-  const d = await r.json();
-  if (!r.ok) throw new Error(d.message || d.error || 'Error Notion');
-  return d.results || [];
+  let results = [], cursor;
+  do {
+    const body = { page_size: 100 };
+    if (cursor) body.start_cursor = cursor;
+    const r = await fetch(NOTION_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ endpoint: `databases/${dbId}/query`, method: 'POST', body }),
+    });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.message || d.error || 'Error Notion');
+    results = results.concat(d.results || []);
+    cursor = d.has_more ? d.next_cursor : undefined;
+  } while (cursor);
+  return results;
 }
- 
+
 async function notionPatch(pageId, properties) {
   const r = await fetch(NOTION_URL, {
     method: 'POST',
@@ -344,7 +351,7 @@ async function notionPatch(pageId, properties) {
   });
   if (!r.ok) { const d = await r.json(); throw new Error(d.message || 'Patch error'); }
 }
- 
+
 // ════════════════════════════════
 //  PROPERTY HELPERS
 // ════════════════════════════════
@@ -354,7 +361,7 @@ const sel  = (p, k) => prop(p, k)?.select?.name || '';
 const dt   = (p, k) => prop(p, k)?.date?.start || '';
 const rel  = (p, k) => prop(p, k)?.relation?.map(r => r.id) || [];
 const h    = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
- 
+
 // ════════════════════════════════
 //  DATE UTILS
 // ════════════════════════════════
@@ -388,7 +395,7 @@ function fmtWeekRange() {
   const wn = Math.ceil(((new Date() - new Date(new Date().getFullYear(),0,1)) / 86400000 + new Date(new Date().getFullYear(),0,1).getDay() + 1) / 7);
   return `Semana ${wn} · ${s.toLocaleDateString('es-CO',o)} – ${e.toLocaleDateString('es-CO',o)}`;
 }
- 
+
 // ════════════════════════════════
 //  TOAST
 // ════════════════════════════════
@@ -397,7 +404,7 @@ function toast(msg) {
   t.textContent = msg; t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2800);
 }
- 
+
 // ════════════════════════════════
 //  CHECK TASK
 // ════════════════════════════════
@@ -424,7 +431,7 @@ async function checkTask(pageId, btn) {
     toast('⚠️ Error al actualizar');
   }
 }
- 
+
 // ════════════════════════════════
 //  TABS
 // ════════════════════════════════
@@ -436,7 +443,7 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
     document.getElementById(`tab-${tab}`).classList.add('active');
   });
 });
- 
+
 // ════════════════════════════════
 //  FILTER CHIPS
 // ════════════════════════════════
@@ -457,7 +464,7 @@ document.querySelectorAll('.filter-chip').forEach(chip => {
     });
   });
 });
- 
+
 // ════════════════════════════════
 //  BUILD TASK ITEM HTML
 // ════════════════════════════════
@@ -478,7 +485,7 @@ function taskItemHtml(task) {
     ${dateHtml}
   </div>`;
 }
- 
+
 // ════════════════════════════════
 //  BUILD AREA CARD HTML
 // ════════════════════════════════
@@ -487,11 +494,11 @@ function areaCardHtml(area, tasks, objText) {
   const icon  = AREA_ICONS[area]  || '•';
   const clean = objText.replace(/^\[.*?\]\s*/, ''); // strip [SEM 1 JUL] etc.
   const badge = clean.length > 55 ? clean.slice(0,53) + '…' : clean;
- 
+
   const sorted = [...tasks].sort((a,b) =>
     (PRIO_ORDER[sel(a,'Prioridad')] ?? 2) - (PRIO_ORDER[sel(b,'Prioridad')] ?? 2)
   );
- 
+
   return `<div class="area-card" data-area="${h(area)}" style="border-left-color:${color}">
     <div class="area-card-hd">
       <span class="area-icon">${icon}</span>
@@ -504,36 +511,36 @@ function areaCardHtml(area, tasks, objText) {
     }
   </div>`;
 }
- 
+
 // ════════════════════════════════
 //  RENDER AREA GROUPS
 // ════════════════════════════════
 function renderAreaGroups(tab, containerId, timeframe) {
   const el = document.getElementById(containerId);
   if (!el) return;
- 
+
   const isWeek  = tab === 'semanal';
   const filterFn = isWeek ? isThisWeek : isThisMonth;
- 
+
   // Objectives for this timeframe that are En progreso
   const objs = allObjetivos.filter(o =>
     sel(o,'Timeframe') === timeframe && sel(o,'Estado') === 'En progreso'
   );
- 
+
   let html = '';
   for (const area of AREA_ORDER) {
     const tasks = allTasks
       .filter(t => sel(t,'Área') === area && filterFn(dt(t,'Fecha')));
- 
+
     const obj = objs.find(o => sel(o,'Área') === area);
     const objText = obj ? ttl(obj,'Objetivo') : '';
- 
+
     if (!tasks.length && !objText) continue;
     html += areaCardHtml(area, tasks, objText);
   }
- 
+
   el.innerHTML = html || '<div class="empty-state">No hay tareas pendientes 🎉</div>';
- 
+
   // Re-apply current filter
   const area = activeFilter[tab] || '';
   if (area) {
@@ -542,7 +549,7 @@ function renderAreaGroups(tab, containerId, timeframe) {
     });
   }
 }
- 
+
 // ════════════════════════════════
 //  RENDER BACKLOG (no date)
 // ════════════════════════════════
@@ -551,10 +558,10 @@ function renderBacklog() {
   const section = document.getElementById('backlog-section');
   const el = document.getElementById('areas-backlog');
   if (!el || !section) return;
- 
+
   if (!backlogTasks.length) { section.style.display = 'none'; return; }
   section.style.display = '';
- 
+
   let html = '';
   for (const area of AREA_ORDER) {
     const tasks = backlogTasks.filter(t => sel(t,'Área') === area);
@@ -563,7 +570,7 @@ function renderBacklog() {
   }
   el.innerHTML = html || '';
 }
- 
+
 // ════════════════════════════════
 //  RENDER 6 MESES PROGRESS
 // ════════════════════════════════
@@ -595,7 +602,7 @@ function renderProgress() {
     </div>`;
   }).join('');
 }
- 
+
 // ════════════════════════════════
 //  STATS + WEEK PROGRESS
 // ════════════════════════════════
@@ -605,7 +612,7 @@ function updateStats() {
   document.getElementById('stat-crit').textContent  = week.filter(t => sel(t,'Prioridad') === 'Crítica').length;
   document.getElementById('stat-alta').textContent  = week.filter(t => sel(t,'Prioridad') === 'Alta').length;
 }
- 
+
 function updateWeekProgress() {
   const weekAll  = allFetched.filter(t => isThisWeek(dt(t,'Fecha')));
   const weekDone = weekAll.filter(t => sel(t,'Estado') === 'Hecho' || doneIds.has(t.id));
@@ -613,7 +620,7 @@ function updateWeekProgress() {
   document.getElementById('week-prog-fill').style.width = pct + '%';
   document.getElementById('week-pct').textContent = pct + '% completado';
 }
- 
+
 // ════════════════════════════════
 //  LOAD DASHBOARD
 // ════════════════════════════════
@@ -622,38 +629,38 @@ async function loadDashboard() {
   btn.classList.add('spinning');
   document.getElementById('areas-semanal').innerHTML = '<div class="empty-state">Cargando…</div>';
   doneIds = new Set();
- 
+
   try {
     const [clientes, objetivos, tareas] = await Promise.all([
       notionQuery(DB.clientes),
       notionQuery(DB.objetivos),
       notionQuery(DB.tareas),
     ]);
- 
+
     clienteMap   = {};
     clientes.forEach(c => { clienteMap[c.id] = ttl(c,'Nombre'); });
- 
+
     allObjetivos = objetivos;
     allFetched   = tareas;
     allTasks     = tareas.filter(t => sel(t,'Estado') !== 'Hecho');
- 
+
     renderAreaGroups('semanal', 'areas-semanal', 'Semanal');
     renderAreaGroups('mensual', 'areas-mensual', 'Mensual');
     renderBacklog();
     renderProgress();
     updateStats();
     updateWeekProgress();
- 
+
     document.getElementById('week-range').textContent = fmtWeekRange();
- 
+
   } catch(e) {
     document.getElementById('areas-semanal').innerHTML =
       `<div class="empty-state">⚠️ Error de conexión<br><small style="color:#9ca3af;margin-top:6px;display:block">${h(e.message)}</small></div>`;
   }
- 
+
   btn.classList.remove('spinning');
 }
- 
+
 // ════════════════════════════════
 //  INIT
 // ════════════════════════════════
