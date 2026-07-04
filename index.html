@@ -280,6 +280,13 @@
 
 <!-- ── MENSUAL ── -->
 <div id="tab-mensual" class="tab-pane">
+  <div class="week-banner">
+    <span id="month-label"></span>
+    <div class="week-right">
+      <div class="week-prog-track"><div class="week-prog-fill" id="month-prog-fill" style="width:0%"></div></div>
+      <span class="week-pct" id="month-pct">0% completado</span>
+    </div>
+  </div>
   <div class="filter-bar" id="filter-bar-mensual">
     <button class="filter-chip active" data-tab="mensual" data-area="">Todas</button>
     <button class="filter-chip" data-tab="mensual" data-area="Agencia">🏢 Agencia</button>
@@ -633,9 +640,10 @@ function renderAreaGroups(tab, containerId, timeframe) {
   const filterFn = isWeek ? isThisWeek : isThisMonth;
   const range    = isWeek ? weekRange() : monthRange();
 
-  const objs = allObjetivos.filter(o =>
-    sel(o,'Timeframe') === timeframe && sel(o,'Estado') === 'En progreso'
-  );
+  // For mensual: match by Date field (current month). For semanal: by Timeframe property.
+  const objs = isWeek
+    ? allObjetivos.filter(o => sel(o,'Timeframe') === timeframe && sel(o,'Estado') === 'En progreso')
+    : allObjetivos.filter(o => isThisMonth(dt(o, 'Date')));
 
   let html = '';
   for (const area of AREA_ORDER) {
@@ -765,6 +773,25 @@ function updateStats() {
   document.getElementById('stat-alta').textContent  = alta;
 }
 
+function updateMonthProgress() {
+  const now = new Date();
+  const monthName = now.toLocaleDateString('es-CO', { month: 'long', year: 'numeric' });
+  const label = monthName.charAt(0).toUpperCase() + monthName.slice(1);
+
+  const monthAll  = allFetched.filter(t =>
+    isThisMonth(dt(t,'Fecha')) && !RUTINA_NAMES.has(ttl(t,'Tarea'))
+  );
+  const monthDone = monthAll.filter(t => sel(t,'Estado') === 'Hecho' || doneIds.has(t.id));
+  const pct = monthAll.length ? Math.round(monthDone.length / monthAll.length * 100) : 0;
+
+  const el = document.getElementById('month-label');
+  if (el) el.textContent = label;
+  const fill = document.getElementById('month-prog-fill');
+  if (fill) fill.style.width = pct + '%';
+  const pctEl = document.getElementById('month-pct');
+  if (pctEl) pctEl.textContent = pct + '% completado';
+}
+
 function updateWeekProgress() {
   const { s, e } = weekRange();
   const realWeekAll = allFetched.filter(t =>
@@ -817,6 +844,7 @@ async function loadDashboard() {
     renderProgress();
     updateStats();
     updateWeekProgress();
+    updateMonthProgress();
 
     document.getElementById('week-range').textContent = fmtWeekRange();
 
