@@ -570,6 +570,15 @@ document.querySelectorAll('.filter-chip').forEach(chip => {
 //  BUILD TASK ITEM HTML
 // ════════════════════════════════
 function taskItemHtml(task) {
+  // Monthly goal item (from Objetivos DB)
+  if (task._goal) {
+    const color = AREA_COLORS[task._area] || '#888';
+    return `<div class="task-item goal-item" style="background:${color}08;border-radius:6px;padding:8px 10px;margin-bottom:2px;">
+      <span class="prio-dot" style="background:${color};opacity:0.7"></span>
+      <span class="task-text" style="font-weight:500;color:var(--text)">${h(task._nombre)}</span>
+      <span class="rutina-tag" style="background:${color}20;color:${color};border-radius:4px;padding:2px 7px;font-size:10px;font-weight:600;white-space:nowrap">meta del mes</span>
+    </div>`;
+  }
   // Virtual rutina
   if (task._virtual) {
     const prioClass = task._prio === 'Crítica' ? 'critica' : task._prio === 'Alta' ? 'alta' : 'normal';
@@ -660,8 +669,19 @@ function renderAreaGroups(tab, containerId, timeframe) {
     const obj     = objs.find(o => sel(o,'Área') === area);
     const objText = obj ? ttl(obj,'Objetivo') : '';
 
-    if (!combined.length && !objText) continue;
-    html += areaCardHtml(area, combined, objText);
+    // For mensual: inject objective as first task item (not badge)
+    let displayTasks = combined;
+    let badgeText    = objText;
+    if (!isWeek && obj) {
+      displayTasks = [
+        { _virtual: true, _goal: true, _id: `goal-${area}`, _nombre: objText, _area: area, _prio: 'Alta', _fecha: '' },
+        ...combined,
+      ];
+      badgeText = ''; // no badge in header
+    }
+
+    if (!displayTasks.length && !badgeText) continue;
+    html += areaCardHtml(area, displayTasks, badgeText);
   }
 
   el.innerHTML = html || '<div class="empty-state">No hay tareas pendientes 🎉</div>';
