@@ -540,7 +540,7 @@ function renderObjs(objs, containerId, timeframe) {
   const el = document.getElementById(containerId);
   if (!el) return;
   const filtered = objs
-    .filter(o => sel(o,'Timeframe') === timeframe && sel(o,'Estado') !== 'Completado')
+    .filter(o => sel(o,'Timeframe') === timeframe && sel(o,'Estado') === 'En progreso')
     .sort((a,b) => AREA_ORDER.indexOf(sel(a,'Área')) - AREA_ORDER.indexOf(sel(b,'Área')));
   if (!filtered.length) { el.innerHTML = '<p style="color:var(--sub);font-size:12px">Sin objetivos configurados.</p>'; return; }
   el.innerHTML = filtered.map(o => {
