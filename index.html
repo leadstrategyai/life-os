@@ -183,18 +183,30 @@
     }
     .prog-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      grid-template-columns: 1fr;
       gap: 10px;
     }
     .prog-card {
       background: var(--card); border: 1px solid var(--border);
       border-radius: var(--r); padding: 16px 18px;
     }
-    .prog-card-hd { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+    .prog-card-hd { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
     .prog-icon { font-size: 16px; }
-    .prog-area-name { font-size: 13px; font-weight: 600; }
-    .prog-target { margin-left: auto; font-size: 11px; color: var(--muted); text-align: right; max-width: 110px; line-height: 1.3; }
-    .prog-obj { font-size: 11px; color: var(--muted); line-height: 1.4; margin-bottom: 12px; }
+    .prog-area-name { font-size: 14px; font-weight: 700; }
+    .prog-target { margin-left: auto; font-size: 11px; color: var(--muted); text-align: right; line-height: 1.3; }
+    .prog-months { margin: 0 0 12px; }
+    .prog-month-row {
+      display: flex; gap: 10px; align-items: flex-start;
+      padding: 6px 0; border-bottom: 0.5px solid #f3f4f6;
+    }
+    .prog-month-row:last-child { border-bottom: none; }
+    .prog-month-tag {
+      font-size: 10px; font-weight: 600;
+      padding: 2px 7px; border-radius: 4px;
+      flex-shrink: 0; min-width: 34px; text-align: center;
+      letter-spacing: 0.3px; text-transform: uppercase;
+    }
+    .prog-month-text { font-size: 12px; color: var(--text); line-height: 1.5; }
     .prog-track { background: #e5e7eb; border-radius: 6px; height: 5px; overflow: hidden; }
     .prog-fill { height: 100%; border-radius: 6px; transition: width 1.2s ease; }
     .prog-meta { display: flex; justify-content: space-between; margin-top: 6px; font-size: 11px; color: var(--muted); }
@@ -315,6 +327,8 @@ const SEMESTRAL_TARGETS = {
   Lectura:   '5 libros leídos',
   Personal:  'Boda planeada',
 };
+const MES_ORDER = { JULIO:0, AGOSTO:1, SEPTIEMBRE:2, OCTUBRE:3, NOVIEMBRE:4, DICIEMBRE:5 };
+const MES_LABEL = { JULIO:'Jul', AGOSTO:'Ago', SEPTIEMBRE:'Sep', OCTUBRE:'Oct', NOVIEMBRE:'Nov', DICIEMBRE:'Dic' };
 const NOTION_URL = '/.netlify/functions/notion';
 
 // ════════════════════════════════
@@ -679,23 +693,51 @@ function renderBacklog() {
 function renderProgress() {
   const el = document.getElementById('prog-semestral');
   if (!el) return;
+
   el.innerHTML = AREA_ORDER.map(area => {
-    const color   = AREA_COLORS[area] || '#888';
-    const icon    = AREA_ICONS[area]  || '•';
-    const aTask   = allFetched.filter(t => sel(t,'Área') === area);
-    const done    = aTask.filter(t => sel(t,'Estado') === 'Hecho' || doneIds.has(t.id));
-    const pct     = aTask.length ? Math.round(done.length / aTask.length * 100) : 0;
-    const obj     = allObjetivos.find(o => sel(o,'Área') === area && sel(o,'Timeframe') === 'Anual');
-    const rawText = obj ? ttl(obj,'Objetivo').replace(/^\[.*?\]\s*/, '') : '';
-    const objText = rawText.length > 80 ? rawText.slice(0,78) + '…' : rawText;
-    const target  = SEMESTRAL_TARGETS[area] || '';
+    const color  = AREA_COLORS[area] || '#888';
+    const icon   = AREA_ICONS[area]  || '•';
+    const aTask  = allFetched.filter(t =>
+      sel(t,'Área') === area && !RUTINA_NAMES.has(ttl(t,'Tarea'))
+    );
+    const done   = aTask.filter(t => sel(t,'Estado') === 'Hecho' || doneIds.has(t.id));
+    const pct    = aTask.length ? Math.round(done.length / aTask.length * 100) : 0;
+    const target = SEMESTRAL_TARGETS[area] || '';
+
+    // Pull monthly objectives — sorted by Date field from Notion
+    const MES_SHORT = ['','Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+    const monthlyObjs = allObjetivos
+      .filter(o => sel(o,'Área') === area)
+      .map(o => {
+        const fecha = dt(o, 'Date');
+        if (!fecha) return null;
+        const d = new Date(fecha + 'T12:00:00');
+        return {
+          mesLabel: MES_SHORT[d.getMonth() + 1] || '?',
+          texto:    ttl(o, 'Objetivo'),
+          order:    d.getTime(),
+        };
+      })
+      .filter(Boolean)
+      .sort((a, b) => a.order - b.order);
+
+    const monthsHtml = monthlyObjs.length
+      ? monthlyObjs.map(m => `
+          <div class="prog-month-row">
+            <span class="prog-month-tag" style="background:${color}18;color:${color}">${h(m.mesLabel)}</span>
+            <span class="prog-month-text">${h(m.texto)}</span>
+          </div>`).join('')
+      : `<div class="prog-month-row">
+          <span class="prog-month-text" style="color:var(--sub)">Sin objetivos mensuales aún</span>
+        </div>`;
+
     return `<div class="prog-card">
       <div class="prog-card-hd">
         <span class="prog-icon">${icon}</span>
         <span class="prog-area-name" style="color:${color}">${h(area)}</span>
         <span class="prog-target">${h(target)}</span>
       </div>
-      ${objText ? `<div class="prog-obj">${h(objText)}</div>` : ''}
+      <div class="prog-months">${monthsHtml}</div>
       <div class="prog-track"><div class="prog-fill" style="width:${pct}%;background:${color}"></div></div>
       <div class="prog-meta">
         <span>${done.length}/${aTask.length} tareas</span>
