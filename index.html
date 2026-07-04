@@ -162,6 +162,11 @@
     .task-date { font-size: 11px; color: var(--sub); flex-shrink: 0; }
     .task-date.overdue { color: #ef4444; font-weight: 500; }
     .task-no-date { font-size: 10px; color: #d1d5db; flex-shrink: 0; font-style: italic; }
+    .rutina-tag {
+      font-size: 10px; color: #9ca3af;
+      border: 1px solid #e5e7eb; border-radius: 4px;
+      padding: 1px 5px; flex-shrink: 0; letter-spacing: 0.2px;
+    }
 
     .area-empty { padding: 11px 16px; font-size: 12px; color: var(--sub); }
 
@@ -313,14 +318,35 @@ const SEMESTRAL_TARGETS = {
 const NOTION_URL = '/.netlify/functions/notion';
 
 // ════════════════════════════════
+//  RUTINAS (virtual — no Notion)
+//  dias: 0=Dom 1=Lun 2=Mar 3=Mié 4=Jue 5=Vie 6=Sáb
+// ════════════════════════════════
+const RUTINAS = [
+  { nombre: '🏋️ Ir al gym',                          area: 'Ejercicio', prio: 'Normal', dias: [1,3,5] },
+  { nombre: '📚 Leer 20-30 páginas',                   area: 'Lectura',   prio: 'Normal', dias: [1]     },
+  { nombre: '💰 Revisión finanzas (10 min)',            area: 'Finanzas',  prio: 'Alta',   dias: [0]     },
+  { nombre: '📋 Revisión semanal + plan próx. semana', area: 'Personal',  prio: 'Alta',   dias: [0]     },
+];
+
+// Names to filter out from Notion if they still exist there
+const RUTINA_NAMES = new Set([
+  '🏋️ Ir al gym',
+  '📚 Leer 20-30 páginas',
+  '💰 Revisión finanzas (10 min)',
+  '📋 Revisión semanal + plan próxima semana',
+  '📋 Revisión semanal + plan próx. semana',
+]);
+
+// ════════════════════════════════
 //  STATE
 // ════════════════════════════════
-let allTasks     = [];
-let allFetched   = [];
-let allObjetivos = [];
-let clienteMap   = {};
-let doneIds      = new Set();
-let activeFilter = { semanal: '', mensual: '' };
+let allTasks      = [];
+let allFetched    = [];
+let allObjetivos  = [];
+let clienteMap    = {};
+let doneIds       = new Set();
+let doneVirtualIds = new Set();
+let activeFilter  = { semanal: '', mensual: '' };
 
 // ════════════════════════════════
 //  NOTION API
@@ -359,7 +385,6 @@ const prop = (p, k) => p.properties?.[k];
 const ttl  = (p, k) => prop(p, k)?.title?.[0]?.plain_text || '';
 const sel  = (p, k) => prop(p, k)?.select?.name || '';
 const dt   = (p, k) => prop(p, k)?.date?.start || '';
-const rel  = (p, k) => prop(p, k)?.relation?.map(r => r.id) || [];
 const h    = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 
 // ════════════════════════════════
@@ -370,6 +395,12 @@ function weekRange() {
   const diff = day === 0 ? -6 : 1 - day;
   const s = new Date(now); s.setDate(now.getDate() + diff); s.setHours(0,0,0,0);
   const e = new Date(s);   e.setDate(s.getDate() + 6);      e.setHours(23,59,59,999);
+  return { s, e };
+}
+function monthRange() {
+  const now = new Date();
+  const s = new Date(now.getFullYear(), now.getMonth(), 1, 0, 0, 0, 0);
+  const e = new Date(now.getFullYear(), now.getMonth()+1, 0, 23, 59, 59, 999);
   return { s, e };
 }
 function isThisWeek(d) {
@@ -397,6 +428,37 @@ function fmtWeekRange() {
 }
 
 // ════════════════════════════════
+//  RUTINAS GENERATOR
+// ════════════════════════════════
+function generateRutinas(start, end) {
+  const virtuals = [];
+  const cur = new Date(start);
+  cur.setHours(12, 0, 0, 0);
+  while (cur <= end) {
+    const dow   = cur.getDay();
+    const fecha = cur.toISOString().slice(0, 10);
+    for (const r of RUTINAS) {
+      if (r.dias.includes(dow)) {
+        virtuals.push({
+          _virtual: true,
+          _id:      `rutina-${r.area}-${fecha}`,
+          _nombre:  r.nombre,
+          _area:    r.area,
+          _prio:    r.prio,
+          _fecha:   fecha,
+        });
+      }
+    }
+    cur.setDate(cur.getDate() + 1);
+  }
+  return virtuals;
+}
+
+function getPrio(t) {
+  return t._virtual ? t._prio : (sel(t, 'Prioridad') || 'Normal');
+}
+
+// ════════════════════════════════
 //  TOAST
 // ════════════════════════════════
 function toast(msg) {
@@ -406,7 +468,7 @@ function toast(msg) {
 }
 
 // ════════════════════════════════
-//  CHECK TASK
+//  CHECK REAL TASK (Notion)
 // ════════════════════════════════
 async function checkTask(pageId, btn) {
   btn.innerHTML = '✓';
@@ -433,6 +495,25 @@ async function checkTask(pageId, btn) {
 }
 
 // ════════════════════════════════
+//  CHECK RUTINA (virtual — local only)
+// ════════════════════════════════
+function checkRutina(vId, btn) {
+  btn.innerHTML = '✓';
+  btn.style.cssText += 'border-color:#22c55e;color:#22c55e;';
+  btn.disabled = true;
+  const item = btn.closest('.task-item');
+  item.style.opacity = '.4';
+  doneVirtualIds.add(vId);
+  item.classList.add('fading');
+  toast('✅ Rutina completada');
+  setTimeout(() => {
+    item.remove();
+    updateStats();
+    updateWeekProgress();
+  }, 380);
+}
+
+// ════════════════════════════════
 //  TABS
 // ════════════════════════════════
 document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -453,7 +534,6 @@ document.querySelectorAll('.filter-chip').forEach(chip => {
     activeFilter[tab] = area;
     document.querySelectorAll(`.filter-chip[data-tab="${tab}"]`)
       .forEach(c => c.classList.toggle('active', c.dataset.area === area));
-    // Show/hide area cards
     const containers = tab === 'semanal'
       ? ['areas-semanal', 'areas-backlog']
       : [`areas-${tab}`];
@@ -469,6 +549,18 @@ document.querySelectorAll('.filter-chip').forEach(chip => {
 //  BUILD TASK ITEM HTML
 // ════════════════════════════════
 function taskItemHtml(task) {
+  // Virtual rutina
+  if (task._virtual) {
+    const prioClass = task._prio === 'Crítica' ? 'critica' : task._prio === 'Alta' ? 'alta' : 'normal';
+    return `<div class="task-item" data-id="${h(task._id)}">
+      <button class="check-btn" onclick="checkRutina('${h(task._id)}',this)"></button>
+      <span class="prio-dot ${prioClass}"></span>
+      <span class="task-text">${h(task._nombre)}</span>
+      <span class="rutina-tag">rutina</span>
+      <span class="task-date">${fmtDate(task._fecha)}</span>
+    </div>`;
+  }
+  // Real Notion task
   const id    = task.id;
   const name  = ttl(task, 'Tarea');
   const prio  = sel(task, 'Prioridad') || 'Normal';
@@ -492,12 +584,16 @@ function taskItemHtml(task) {
 function areaCardHtml(area, tasks, objText) {
   const color = AREA_COLORS[area] || '#888';
   const icon  = AREA_ICONS[area]  || '•';
-  const clean = objText.replace(/^\[.*?\]\s*/, ''); // strip [SEM 1 JUL] etc.
+  const clean = objText.replace(/^\[.*?\]\s*/, '');
   const badge = clean.length > 55 ? clean.slice(0,53) + '…' : clean;
 
-  const sorted = [...tasks].sort((a,b) =>
-    (PRIO_ORDER[sel(a,'Prioridad')] ?? 2) - (PRIO_ORDER[sel(b,'Prioridad')] ?? 2)
-  );
+  const sorted = [...tasks].sort((a, b) => {
+    const pd = (PRIO_ORDER[getPrio(a)] ?? 2) - (PRIO_ORDER[getPrio(b)] ?? 2);
+    if (pd !== 0) return pd;
+    const da = a._virtual ? a._fecha : dt(a,'Fecha');
+    const db = b._virtual ? b._fecha : dt(b,'Fecha');
+    return (da||'').localeCompare(db||'');
+  });
 
   return `<div class="area-card" data-area="${h(area)}" style="border-left-color:${color}">
     <div class="area-card-hd">
@@ -507,41 +603,47 @@ function areaCardHtml(area, tasks, objText) {
     </div>
     ${sorted.length
       ? sorted.map(taskItemHtml).join('')
-      : '<div class="area-empty">Sin tareas programadas esta semana</div>'
+      : '<div class="area-empty">Sin tareas programadas</div>'
     }
   </div>`;
 }
 
 // ════════════════════════════════
-//  RENDER AREA GROUPS
+//  RENDER AREA GROUPS (real + virtual)
 // ════════════════════════════════
 function renderAreaGroups(tab, containerId, timeframe) {
   const el = document.getElementById(containerId);
   if (!el) return;
 
-  const isWeek  = tab === 'semanal';
+  const isWeek   = tab === 'semanal';
   const filterFn = isWeek ? isThisWeek : isThisMonth;
+  const range    = isWeek ? weekRange() : monthRange();
 
-  // Objectives for this timeframe that are En progreso
   const objs = allObjetivos.filter(o =>
     sel(o,'Timeframe') === timeframe && sel(o,'Estado') === 'En progreso'
   );
 
   let html = '';
   for (const area of AREA_ORDER) {
-    const tasks = allTasks
-      .filter(t => sel(t,'Área') === area && filterFn(dt(t,'Fecha')));
+    // Real tasks from Notion
+    const realTasks = allTasks.filter(t =>
+      sel(t,'Área') === area && filterFn(dt(t,'Fecha'))
+    );
+    // Virtual rutinas for this period
+    const virtTasks = generateRutinas(range.s, range.e).filter(v =>
+      v._area === area && !doneVirtualIds.has(v._id)
+    );
+    const combined = [...realTasks, ...virtTasks];
 
-    const obj = objs.find(o => sel(o,'Área') === area);
+    const obj     = objs.find(o => sel(o,'Área') === area);
     const objText = obj ? ttl(obj,'Objetivo') : '';
 
-    if (!tasks.length && !objText) continue;
-    html += areaCardHtml(area, tasks, objText);
+    if (!combined.length && !objText) continue;
+    html += areaCardHtml(area, combined, objText);
   }
 
   el.innerHTML = html || '<div class="empty-state">No hay tareas pendientes 🎉</div>';
 
-  // Re-apply current filter
   const area = activeFilter[tab] || '';
   if (area) {
     el.querySelectorAll('.area-card').forEach(card => {
@@ -551,7 +653,7 @@ function renderAreaGroups(tab, containerId, timeframe) {
 }
 
 // ════════════════════════════════
-//  RENDER BACKLOG (no date)
+//  RENDER BACKLOG (no date, real only)
 // ════════════════════════════════
 function renderBacklog() {
   const backlogTasks = allTasks.filter(t => !dt(t,'Fecha'));
@@ -607,16 +709,34 @@ function renderProgress() {
 //  STATS + WEEK PROGRESS
 // ════════════════════════════════
 function updateStats() {
-  const week = allTasks.filter(t => isThisWeek(dt(t,'Fecha')));
-  document.getElementById('stat-total').textContent = week.length;
-  document.getElementById('stat-crit').textContent  = week.filter(t => sel(t,'Prioridad') === 'Crítica').length;
-  document.getElementById('stat-alta').textContent  = week.filter(t => sel(t,'Prioridad') === 'Alta').length;
+  const { s, e } = weekRange();
+  const realWeek = allTasks.filter(t => isThisWeek(dt(t,'Fecha')));
+  const virtWeek = generateRutinas(s, e).filter(v => !doneVirtualIds.has(v._id));
+
+  const total = realWeek.length + virtWeek.length;
+  const crit  = realWeek.filter(t => sel(t,'Prioridad') === 'Crítica').length;
+  const alta  = realWeek.filter(t => sel(t,'Prioridad') === 'Alta').length
+              + virtWeek.filter(v => v._prio === 'Alta').length;
+
+  document.getElementById('stat-total').textContent = total;
+  document.getElementById('stat-crit').textContent  = crit;
+  document.getElementById('stat-alta').textContent  = alta;
 }
 
 function updateWeekProgress() {
-  const weekAll  = allFetched.filter(t => isThisWeek(dt(t,'Fecha')));
-  const weekDone = weekAll.filter(t => sel(t,'Estado') === 'Hecho' || doneIds.has(t.id));
-  const pct = weekAll.length ? Math.round(weekDone.length / weekAll.length * 100) : 0;
+  const { s, e } = weekRange();
+  const realWeekAll = allFetched.filter(t =>
+    isThisWeek(dt(t,'Fecha')) && !RUTINA_NAMES.has(ttl(t,'Tarea'))
+  );
+  const realDone = realWeekAll.filter(t => sel(t,'Estado') === 'Hecho' || doneIds.has(t.id));
+
+  const virtWeekAll = generateRutinas(s, e);
+  const virtDone    = virtWeekAll.filter(v => doneVirtualIds.has(v._id));
+
+  const total = realWeekAll.length + virtWeekAll.length;
+  const done  = realDone.length + virtDone.length;
+  const pct   = total ? Math.round(done / total * 100) : 0;
+
   document.getElementById('week-prog-fill').style.width = pct + '%';
   document.getElementById('week-pct').textContent = pct + '% completado';
 }
@@ -628,7 +748,8 @@ async function loadDashboard() {
   const btn = document.getElementById('refresh-btn');
   btn.classList.add('spinning');
   document.getElementById('areas-semanal').innerHTML = '<div class="empty-state">Cargando…</div>';
-  doneIds = new Set();
+  doneIds        = new Set();
+  doneVirtualIds = new Set();
 
   try {
     const [clientes, objetivos, tareas] = await Promise.all([
@@ -637,12 +758,16 @@ async function loadDashboard() {
       notionQuery(DB.tareas),
     ]);
 
-    clienteMap   = {};
+    clienteMap  = {};
     clientes.forEach(c => { clienteMap[c.id] = ttl(c,'Nombre'); });
 
     allObjetivos = objetivos;
     allFetched   = tareas;
-    allTasks     = tareas.filter(t => sel(t,'Estado') !== 'Hecho');
+
+    // Exclude rutinas (they live in the dashboard now) and done tasks
+    allTasks = tareas.filter(t =>
+      sel(t,'Estado') !== 'Hecho' && !RUTINA_NAMES.has(ttl(t,'Tarea'))
+    );
 
     renderAreaGroups('semanal', 'areas-semanal', 'Semanal');
     renderAreaGroups('mensual', 'areas-mensual', 'Mensual');
