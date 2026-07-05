@@ -224,6 +224,48 @@
     #toast.show { opacity: 1; transform: translateY(0); }
     @keyframes fadeOut { to { opacity: 0; transform: translateX(20px); } }
     .fading { animation: fadeOut .35s forwards; }
+
+    /* ── QUICK ADD ── */
+    #add-task-btn {
+      position: fixed; bottom: 24px; right: 20px;
+      width: 50px; height: 50px; border-radius: 50%;
+      background: #111827; color: white; border: none;
+      font-size: 26px; cursor: pointer; z-index: 100;
+      box-shadow: 0 4px 18px rgba(0,0,0,.22);
+      display: flex; align-items: center; justify-content: center;
+      transition: all .15s; line-height: 1;
+    }
+    #add-task-btn:hover { background: #374151; transform: scale(1.08); }
+    #modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,.45);
+      display: none; align-items: flex-end; justify-content: center;
+      z-index: 200;
+    }
+    #modal-overlay.open { display: flex; }
+    .quick-add-sheet {
+      background: white; border-radius: 20px 20px 0 0;
+      padding: 24px 20px 36px; width: 100%; max-width: 480px;
+      animation: slideUp .2s ease;
+    }
+    @keyframes slideUp { from { transform: translateY(40px); opacity:0; } to { transform: translateY(0); opacity:1; } }
+    .quick-add-title { font-size: 15px; font-weight: 700; margin-bottom: 16px; color: #111827; }
+    .qa-field { margin-bottom: 12px; }
+    .qa-field label { font-size: 11px; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 5px; }
+    .qa-input {
+      width: 100%; padding: 10px 12px; border: 1.5px solid #e5e7eb;
+      border-radius: 8px; font-size: 14px; font-family: 'Inter', sans-serif;
+      outline: none; box-sizing: border-box; color: #111827; background: white;
+    }
+    .qa-input:focus { border-color: #111827; }
+    .qa-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .qa-submit {
+      width: 100%; padding: 13px; background: #111827; color: white;
+      border: none; border-radius: 10px; font-size: 14px; font-weight: 600;
+      cursor: pointer; margin-top: 6px; font-family: 'Inter', sans-serif;
+      transition: background .15s;
+    }
+    .qa-submit:hover { background: #374151; }
+    .qa-submit:disabled { background: #9ca3af; cursor: default; }
   </style>
 </head>
 <body>
@@ -306,6 +348,45 @@
 </div>
 
 <div id="toast"></div>
+
+<!-- ── QUICK ADD BUTTON + MODAL ── -->
+<button id="add-task-btn" onclick="openAddModal()" title="Nueva tarea">+</button>
+
+<div id="modal-overlay" onclick="closeAddModal(event)">
+  <div class="quick-add-sheet" onclick="event.stopPropagation()">
+    <div class="quick-add-title">➕ Nueva tarea</div>
+    <div class="qa-field">
+      <label>Tarea</label>
+      <input id="qa-name" class="qa-input" type="text" placeholder="¿Qué tienes que hacer?" />
+    </div>
+    <div class="qa-row">
+      <div class="qa-field">
+        <label>Área</label>
+        <select id="qa-area" class="qa-input">
+          <option value="Agencia">🏢 Agencia</option>
+          <option value="Trabajo">💼 Trabajo</option>
+          <option value="Finanzas">💰 Finanzas</option>
+          <option value="Ejercicio">💪 Ejercicio</option>
+          <option value="Personal">🏠 Personal</option>
+          <option value="Lectura">📚 Lectura</option>
+        </select>
+      </div>
+      <div class="qa-field">
+        <label>Prioridad</label>
+        <select id="qa-prio" class="qa-input">
+          <option value="Normal">Normal</option>
+          <option value="Alta">Alta</option>
+          <option value="Crítica">🔴 Crítica</option>
+        </select>
+      </div>
+    </div>
+    <div class="qa-field">
+      <label>Fecha</label>
+      <input id="qa-date" class="qa-input" type="date" />
+    </div>
+    <button id="qa-submit" class="qa-submit" onclick="submitAddTask()">Crear tarea</button>
+  </div>
+</div>
 
 <script>
 // ════════════════════════════════
@@ -889,6 +970,69 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('header-date').textContent =
     now.toLocaleDateString('es-CO', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
   loadDashboard();
+});
+
+// ════════════════════════════════
+//  QUICK ADD TASK
+// ════════════════════════════════
+async function notionCreate(properties) {
+  const r = await fetch(NOTION_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      endpoint: 'pages',
+      method: 'POST',
+      body: { parent: { database_id: DB.tareas }, properties }
+    }),
+  });
+  if (!r.ok) { const d = await r.json(); throw new Error(d.message || 'Error al crear'); }
+  return r.json();
+}
+
+function openAddModal() {
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('qa-date').value = today;
+  document.getElementById('qa-name').value = '';
+  document.getElementById('qa-prio').value = 'Normal';
+  document.getElementById('modal-overlay').classList.add('open');
+  setTimeout(() => document.getElementById('qa-name').focus(), 150);
+}
+
+function closeAddModal(e) {
+  if (!e || e.target === document.getElementById('modal-overlay')) {
+    document.getElementById('modal-overlay').classList.remove('open');
+  }
+}
+
+async function submitAddTask() {
+  const name = document.getElementById('qa-name').value.trim();
+  const area = document.getElementById('qa-area').value;
+  const prio = document.getElementById('qa-prio').value;
+  const date = document.getElementById('qa-date').value;
+  if (!name) { document.getElementById('qa-name').focus(); return; }
+  const btn = document.getElementById('qa-submit');
+  btn.disabled = true; btn.textContent = 'Creando…';
+  try {
+    await notionCreate({
+      Tarea:     { title:  [{ text: { content: name } }] },
+      'Área':    { select: { name: area } },
+      Prioridad: { select: { name: prio } },
+      Estado:    { select: { name: 'En progreso' } },
+      Fecha:     { date:   { start: date } },
+    });
+    closeAddModal();
+    toast(`✅ "${name}" creada`);
+    await loadDashboard();
+  } catch(e) {
+    toast('❌ ' + e.message);
+    btn.disabled = false; btn.textContent = 'Crear tarea';
+  }
+}
+
+document.addEventListener('keydown', e => {
+  const open = document.getElementById('modal-overlay').classList.contains('open');
+  if (e.key === 'Escape' && open) closeAddModal();
+  if (e.key === 'Enter'  && open) submitAddTask();
 });
 </script>
 </body>
