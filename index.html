@@ -289,6 +289,7 @@
 <nav class="tabs-nav">
   <button class="tab-btn" data-tab="semestral">🎯 6 Meses</button>
   <button class="tab-btn" data-tab="mensual">📅 Mensual</button>
+  <button class="tab-btn" data-tab="priority">🔥 Priority</button>
   <button class="tab-btn active" data-tab="semanal">⚡ Semanal</button>
 </nav>
 
@@ -339,6 +340,19 @@
     <button class="filter-chip" data-tab="mensual" data-area="Personal">🏠 Personal</button>
   </div>
   <div id="areas-mensual"><div class="empty-state">Cargando…</div></div>
+</div>
+
+<!-- ── PRIORITY LIST ── -->
+<div id="tab-priority" class="tab-pane">
+  <div class="week-banner">
+    <span id="priority-label"></span>
+    <div class="week-right">
+      <span class="week-pct" style="font-size:11px;color:var(--muted)">Todas las tareas · orden de prioridad</span>
+    </div>
+  </div>
+  <div id="priority-list" style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden">
+    <div class="empty-state">Cargando…</div>
+  </div>
 </div>
 
 <!-- ── 6 MESES ── -->
@@ -946,6 +960,7 @@ async function loadDashboard() {
 
     renderAreaGroups('semanal', 'areas-semanal', 'Semanal');
     renderAreaGroups('mensual', 'areas-mensual', 'Mensual');
+    renderPriorityList();
     renderBacklog();
     renderProgress();
     updateStats();
@@ -971,6 +986,59 @@ document.addEventListener('DOMContentLoaded', () => {
     now.toLocaleDateString('es-CO', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
   loadDashboard();
 });
+
+// ════════════════════════════════
+//  PRIORITY LIST
+// ════════════════════════════════
+function renderPriorityList() {
+  const el = document.getElementById('priority-list');
+  if (!el) return;
+
+  // All pending tasks this month (no rutinas, no done)
+  const tasks = allTasks.filter(t => isThisMonth(dt(t, 'Fecha')));
+
+  // Sort Crítica → Alta → Normal, then by date
+  const sorted = [...tasks].sort((a, b) => {
+    const pd = (PRIO_ORDER[getPrio(a)] ?? 2) - (PRIO_ORDER[getPrio(b)] ?? 2);
+    if (pd !== 0) return pd;
+    return (dt(a,'Fecha')||'').localeCompare(dt(b,'Fecha')||'');
+  });
+
+  // Update banner label
+  const now = new Date();
+  const monthName = now.toLocaleDateString('es-CO', { month: 'long', year: 'numeric' });
+  const lbl = document.getElementById('priority-label');
+  if (lbl) lbl.textContent = monthName.charAt(0).toUpperCase() + monthName.slice(1);
+
+  if (!sorted.length) {
+    el.innerHTML = '<div class="empty-state">No hay tareas pendientes este mes 🎉</div>';
+    return;
+  }
+
+  el.innerHTML = sorted.map(task => {
+    const id    = task.id;
+    const name  = ttl(task, 'Tarea');
+    const prio  = getPrio(task);
+    const fecha = dt(task, 'Fecha');
+    const area  = sel(task, 'Área');
+    const prioClass = prio === 'Crítica' ? 'critica' : prio === 'Alta' ? 'alta' : 'normal';
+    const over  = fecha && new Date(fecha + 'T12:00:00') < new Date();
+    const dateHtml = fecha
+      ? `<span class="task-date ${over ? 'overdue' : ''}">${fmtDate(fecha)}</span>`
+      : `<span class="task-no-date">sin fecha</span>`;
+    const areaColor = AREA_COLORS[area] || '#888';
+    const areaTag = area
+      ? `<span style="font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px;background:${areaColor}18;color:${areaColor};flex-shrink:0;white-space:nowrap">${area}</span>`
+      : '';
+    return `<div class="task-item" data-id="${h(id)}">
+      <button class="check-btn" onclick="checkTask('${h(id)}',this)"></button>
+      <span class="prio-dot ${prioClass}"></span>
+      <span class="task-text">${h(name)}</span>
+      ${areaTag}
+      ${dateHtml}
+    </div>`;
+  }).join('');
+}
 
 // ════════════════════════════════
 //  QUICK ADD TASK
