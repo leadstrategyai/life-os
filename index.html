@@ -666,18 +666,23 @@ function renderAreaGroups(tab, containerId, timeframe) {
     );
     const combined = [...realTasks, ...virtTasks];
 
-    const obj     = objs.find(o => sel(o,'Área') === area);
-    const objText = obj ? ttl(obj,'Objetivo') : '';
+    const areaObjs = objs.filter(o => sel(o,'Área') === area);
+    const objText  = areaObjs.length ? ttl(areaObjs[0],'Objetivo') : '';
 
-    // For mensual: inject objective as first task item (not badge)
+    // For mensual: inject ALL objectives as goal task items (not a single badge)
     let displayTasks = combined;
     let badgeText    = objText;
-    if (!isWeek && obj) {
-      displayTasks = [
-        { _virtual: true, _goal: true, _id: `goal-${area}`, _nombre: objText, _area: area, _prio: 'Alta', _fecha: '' },
-        ...combined,
-      ];
-      badgeText = ''; // no badge in header
+    if (!isWeek && areaObjs.length) {
+      const goalItems = areaObjs.map((o, i) => ({
+        _virtual: true, _goal: true,
+        _id:     `goal-${area}-${i}`,
+        _nombre: ttl(o,'Objetivo'),
+        _area:   area,
+        _prio:   'Alta',
+        _fecha:  '',
+      }));
+      displayTasks = [...goalItems, ...combined];
+      badgeText = ''; // no badge in header for mensual
     }
 
     if (!displayTasks.length && !badgeText) continue;
